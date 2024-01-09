@@ -4,7 +4,7 @@
 			<view class="user_img">
 				<u-avatar :src="avatarUrl"></u-avatar>
 			</view>
-			<view class="loginTip noactive">{{ nickName }}</view>
+			<view class="loginTip noactive" @tap="login">{{ nickName }}</view>
 		</view>
 		<view class="mid"> </view>
 		<view class="user_content">
@@ -73,7 +73,7 @@
 				breakTime: false, // true 客服休息时间 false 客服正常营业
 				/* =========授权登陆改造======= */
 				avatarUrl: "https://cdn.uviewui.com/uview/album/2.jpg", // 用户头像
-				nickName: "",
+				nickName: "立即登录",
 				userInfo: null, // 用户信息  是否为null 来判断用户是否点击登陆
 				// 商品类型1大牌卡劵2手机充值3油卡充值4水费充值5电费充值 后台数据库约定好的，不要随意做改动
 				busTypeList: [{
@@ -103,6 +103,11 @@
 			}
 		},
 		methods: {
+			login(){
+				uni.navigateTo({
+					url: "/pages/login/index",
+				});
+			},
 			// 我的劵包点击事件
 			myCardListClick() {
 				uni.navigateTo({
