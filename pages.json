@@ -10,13 +10,6 @@
 			}
 		},
 		{
-			"path": "pages/cardDetail/index",
-			"style": {
-				"navigationBarTitleText": "详情页",
-				"navigationBarBackgroundColor": "#ffffff"
-			}
-		},
-		{
 			"path": "pages/cardBuyDetail/index",
 			"style": {
 				"navigationBarTitleText": "购物车",

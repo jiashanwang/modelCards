@@ -40,12 +40,13 @@
 
 <script>
 	import {
-		getCardList,getNotice
+		getCardList,
+		getNotice
 	} from '@/config/api.js';
 	export default {
 		data() {
 			return {
-				notice:"积分按照1:1兑换 1元 = 1积分",
+				notice: "积分按照1:1兑换 1元 = 1积分",
 				keyword: "搜索大牌卡劵",
 				swiperList: [
 					"../../static/dapaikajuan_banner.jpeg"
@@ -62,7 +63,6 @@
 				getNotice({
 					keyword: ""
 				}).then((res) => {
-					debugger;
 					this.notice = res;
 				}).catch((err) => {})
 			},
@@ -77,22 +77,41 @@
 				}).catch((err) => {})
 			},
 			jumpDetailPage(item) {
+				// 跳转到详情页 begin
+				// let obj = {
+				// 	brand_id: item.brand_id,
+				// 	square_colour_icon: item.square_colour_icon,
+				// 	brand_name: item.brand_name,
+				// 	icon_img: item.circular_colour_icon,
+				// 	product_type: item.product_type,
+				// 	card_type: item.coupon_name,
+				// 	exchange_notice: item.exchange_notice,
+				// 	writeoff_notice: item.writeoff_notice
+				// };
+				// let data = encodeURIComponent(JSON.stringify(item))
+				// uni.navigateTo({
+				// 	url: "/pages/cardDetail/index?data=" + data
+				// });
+
+				// 跳转到详情页 end
+				// let specsData = this.modalData.specData;
+				// 直接跳转到支付页 begin
 				let obj = {
-					brand_id: item.brand_id,
-					square_colour_icon: item.square_colour_icon,
-					brand_name: item.brand_name,
-					icon_img: item.circular_colour_icon,
-					product_type: item.product_type,
-					card_type: item.coupon_name,
+					buyNum: 1,
+					currSeletedItem: {
+						amount: item.amount,
+						has_charge: 0,
+					},
+					productFullName: item.brand_name,
+					normalImg: item.square_colour_icon,
 					exchange_notice: item.exchange_notice,
 					writeoff_notice: item.writeoff_notice
 				};
-				let data = encodeURIComponent(JSON.stringify(item))
-				console.log("data=")
-				console.log(data);
-				uni.navigateTo({
-					url: "/pages/cardDetail/index?data=" + data
+				let data = encodeURIComponent(JSON.stringify(obj))
+				wx.navigateTo({
+					url: "/pages/cardBuyDetail/index?data=" + data
 				});
+				// 直接跳转到支付页 end
 			},
 		}
 	}

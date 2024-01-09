@@ -22,7 +22,36 @@
 				<u-number-box v-model="buyNum" @change="valChange" integer></u-number-box>
 			</view>
 		</view>
+
 		<!-- 支付方式选择 start -->
+		<!-- 兑换流程和须知 -->
+		<!-- <view class="redemption-process">
+			<view class="line-operate1"></view>
+			<view class="need-notice">
+				<view class="title1">兑换须知</view>
+				<view class="title1-list">
+					<block v-for="(item,index) in orderData.exchange_notice" :key="index">
+						<view class="title1-item">
+							<view class="title1-name">{{item.name}}</view>
+							<view class="title1-content">{{item.content}}</view>
+						</view>
+					</block>
+				</view>
+			</view>
+			<view class="line-operate2"></view>
+			<view class="need-notice">
+				<view class="title1">核销须知</view>
+				<view class="title1-list">
+					<block v-for="(item,index) in orderData.writeoff_notice" :key="index">
+						<view class="title2-item">
+							<view class="title2-name">{{item.name}} </view>
+							<view class="title1-content"> {{item.content}} </view>
+							<i class="iconfont icon-dian"></i>
+						</view>
+					</block>
+				</view>
+			</view>
+		</view> -->
 		<!-- <paymentMode totalPrice="{{totalPrice + chargePrice}}" id="paymentMode" bind:radioChangeEvent = "radioChangeEvent" bind:combinationInputEvent="combinationInputEvent"></paymentMode> -->
 		<!-- 支付方式选择 end -->
 		<view class="total-wrap product-total">
@@ -76,10 +105,11 @@
 			},
 			// 对订单详情页的数据进行处理
 			handleOrderData(orderData) {
+
 				let totalPrice = orderData.buyNum * orderData.currSeletedItem.amount;
 				let chargePrice = 0;
 				this.orderData = orderData;
-				this.buyNum =  orderData.buyNum;
+				this.buyNum = orderData.buyNum;
 				this.totalPrice = totalPrice;
 			},
 			async getOrderData(outtradeno) {
@@ -105,149 +135,201 @@
 </script>
 
 <style lang="scss">
-.card-container{
-  display: block;
-  /* margin:0 24rpx; */
-  background-color: #f5f5f5;
-  position: relative;
-}
-.card-header{
-  display: block;
-  padding:0 24rpx;
-  height:180rpx;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #ffffff;
-  position: relative;
-}
-.left-wrap{
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  height:180rpx;
-}
-.product-desc{
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: flex-start;
-  margin-left:15rpx;
-  height:150rpx;
-}
-.img-wrap .img{
-  height:150rpx;
-  border-radius: 15rpx;
-}
-.face-value,.use-desc{
-  color:#999999;
-  font-size:24rpx;
-}
-.use-desc{
-  background-color: #ffffff;
-  padding:40rpx 24rpx;
-}
-.notice-desc{
-  background-color: #fff6eb;
-  color:#eb8013;
-  height:40rpx;
-  line-height: 40rpx;
-  border-radius: 20rpx;
-  padding-left:16rpx;
-  padding-right:16rpx;
-  font-size:20rpx;
-  position: absolute;
-  bottom:10rpx;
-  right:24rpx;
-}
-.line-operate{
-  height:30rpx;
-  background-color: #ffffff;
-  border-bottom:1rpx solid #eeeeee;
-}
-.buy-wrap{
-  font-size:34rpx;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height:140rpx;
-  line-height: 140rpx;
-  background-color: #ffffff;
-  padding:0rpx 24rpx;
-}
-.buy-operate{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height:60rpx;
-}
-.buy-operate .reduce,.buy-operate .add{
-  width:70rpx;
-  height:80rpx;
-  line-height: 80rpx;
-  text-align:center;
-  border:1rpx solid #f2f2f2;
-}
-.buy-operate .num-input{
-  width:80rpx;
-  height:80rpx;
-  text-align: center;
-  line-height: 80rpx;
-  background-color: #f8f8f8;
-  border-top:1rpx solid #f2f2f2;
-  border-bottom:1rpx solid #f2f2f2;
-}
-.total-wrap{
-  display: flex;
-  justify-content: space-between;
-  padding:0 24rpx;
-  height:80rpx;
-  line-height: 80rpx;
-  background-color: #ffffff;
-  font-size:34rpx;
-}
-.total-wrap .title{
-  width:200rpx;
-}
-.footer-wrap{
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  position: fixed;
-  bottom:0rpx;
-  left:24rpx;
-  right:24rpx;
-  height:140rpx;
-  font-size:32rpx;
-}
-.left-box{
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  flex:1;  
-}
-.price-style,.total-style{
-  font-size:34rpx;
-  color:#eb8013;
-  width:100rpx;
-  margin-left:10rpx;
-}
-.total-style{
-  flex:1;
-  text-align: right;
-}
-.buy-btn{
-  width:230rpx;
-  text-align: center;
-  color:#ffffff;
-  height:80rpx;
-  line-height: 80rpx;
-  background: linear-gradient(to right,#fdb208, #f97b04);
-  letter-spacing: 5rpx;  
-  border-radius: 40rpx;
-  font-size:34rpx;
-}
-.total-num{
-  margin-right:20rpx;
-}
+	.title1-item .title1-name {
+		color: #eb8013;
+		width: 160rpx;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.title1-item .title1-content {
+		flex: 1;
+	}
+
+	.line-operate,
+	.line-operate1,
+	.line-operate2 {
+		background-color: #f5f5f5;
+		height: 16rpx;
+		margin-top: 30rpx;
+	}
+
+	.need-notice .title1 {
+		margin: 40rpx 0 30rpx 20rpx;
+		font-size: 34rpx;
+	}
+
+	.redemption-process {
+		margin-bottom: 160rpx;
+	}
+
+	.card-container {
+		display: block;
+		/* margin:0 24rpx; */
+		background-color: #f5f5f5;
+		position: relative;
+	}
+
+	.card-header {
+		display: block;
+		padding: 0 24rpx;
+		height: 180rpx;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		background-color: #ffffff;
+		position: relative;
+	}
+
+	.left-wrap {
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		height: 180rpx;
+	}
+
+	.product-desc {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		align-items: flex-start;
+		margin-left: 15rpx;
+		height: 150rpx;
+	}
+
+	.img-wrap .img {
+		height: 150rpx;
+		border-radius: 15rpx;
+	}
+
+	.face-value,
+	.use-desc {
+		color: #999999;
+		font-size: 24rpx;
+	}
+
+	.use-desc {
+		background-color: #ffffff;
+		padding: 40rpx 24rpx;
+	}
+
+	.notice-desc {
+		background-color: #fff6eb;
+		color: #eb8013;
+		height: 40rpx;
+		line-height: 40rpx;
+		border-radius: 20rpx;
+		padding-left: 16rpx;
+		padding-right: 16rpx;
+		font-size: 20rpx;
+		position: absolute;
+		bottom: 10rpx;
+		right: 24rpx;
+	}
+
+	.line-operate {
+		height: 30rpx;
+		background-color: #ffffff;
+		border-bottom: 1rpx solid #eeeeee;
+	}
+
+	.buy-wrap {
+		font-size: 34rpx;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		height: 140rpx;
+		line-height: 140rpx;
+		background-color: #ffffff;
+		padding: 0rpx 24rpx;
+	}
+
+	.buy-operate {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 60rpx;
+	}
+
+	.buy-operate .reduce,
+	.buy-operate .add {
+		width: 70rpx;
+		height: 80rpx;
+		line-height: 80rpx;
+		text-align: center;
+		border: 1rpx solid #f2f2f2;
+	}
+
+	.buy-operate .num-input {
+		width: 80rpx;
+		height: 80rpx;
+		text-align: center;
+		line-height: 80rpx;
+		background-color: #f8f8f8;
+		border-top: 1rpx solid #f2f2f2;
+		border-bottom: 1rpx solid #f2f2f2;
+	}
+
+	.total-wrap {
+		display: flex;
+		justify-content: space-between;
+		padding: 0 24rpx;
+		height: 80rpx;
+		line-height: 80rpx;
+		background-color: #ffffff;
+		font-size: 34rpx;
+	}
+
+	.total-wrap .title {
+		width: 200rpx;
+	}
+
+	.footer-wrap {
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+		position: fixed;
+		bottom: 0rpx;
+		left: 24rpx;
+		right: 24rpx;
+		height: 140rpx;
+		font-size: 32rpx;
+	}
+
+	.left-box {
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		flex: 1;
+	}
+
+	.price-style,
+	.total-style {
+		font-size: 34rpx;
+		color: #eb8013;
+		width: 100rpx;
+		margin-left: 10rpx;
+	}
+
+	.total-style {
+		flex: 1;
+		text-align: right;
+	}
+
+	.buy-btn {
+		width: 230rpx;
+		text-align: center;
+		color: #ffffff;
+		height: 80rpx;
+		line-height: 80rpx;
+		background: linear-gradient(to right, #fdb208, #f97b04);
+		letter-spacing: 5rpx;
+		border-radius: 40rpx;
+		font-size: 34rpx;
+	}
+
+	.total-num {
+		margin-right: 20rpx;
+	}
 </style>
