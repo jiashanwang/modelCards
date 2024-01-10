@@ -176,7 +176,8 @@
 				this.show = false;
 			},
 			getBrandEcardList() {
-				getBrandEcardList({}).then((res) => {
+				getBrandEcardList({}).then((result) => {
+					let res = result.data.data;
 					res.forEach(element => {
 						element.integral_price = element.amount;
 						element.amount = parseFloat(element.amount);

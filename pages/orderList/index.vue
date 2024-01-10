@@ -104,7 +104,13 @@
 				this.getOrderListByType();
 			},
 			getOrderListByType() {
-				let openid = "ovYh85fxwyGPxCPRjZ4uXpvmmPVU";
+				let openid = uni.getStorageSync("openid");
+				if (!openid){
+					// 用户未登录
+					this.orders = [];
+					return ;
+				}
+				// let openid = "ovYh85fxwyGPxCPRjZ4uXpvmmPVU";
 				let params = {
 					openid: openid,
 					payState: this.payState

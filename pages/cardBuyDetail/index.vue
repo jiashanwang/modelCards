@@ -34,7 +34,7 @@
 				<view class="total-num">共 {{buyNum}} 件,</view>
 				<view class="total-money">合计 <i class="price-style">¥ {{totalPrice}}</i></view>
 			</view>
-			<view class="buy-btn" bindtap="handleExchangePay">立即兑换</view>
+			<view class="buy-btn" @tap="handleExchangePay">立即兑换</view>
 			<!-- <view class="buy-btn">立即支付</view> -->
 		</view>
 	</view>
@@ -54,7 +54,7 @@
 				currRadioVal: 1, // 支付方式，1 积分支付，2 组合支付，默认为积分支付
 				combinationVal: 0, // 积分支付的金额
 				weixinVal: 0, // 微信支付的金额
-				appid: "wx012623936b6b9aed",
+				appid: "",
 			};
 		},
 		onLoad(options) {
@@ -70,16 +70,38 @@
 				this.totalPrice = this.orderData.currSeletedItem.amount * currNum;
 			},
 			handleExchangePay() {
-				let outtradeno = randomNumber();
-				let amount = this.totalPrice;
-				this.preparePay(outtradeno, amount);
+				debugger;
+				let openid = uni.getStorageSync("openid");
+				if (!openid) {
+					uni.showModal({
+						title: "提示",
+						content: "您还未登录，请先登录!",
+						success: function(res) {
+							if (res.confirm) {
+								wx.navigateTo({
+									url: "/pages/login/login"
+								});
+							} else {}
+						}
+					})
+				} else {
+					let outtradeno = window.sessionStorage.getItem("outOrderNo");
+					let orderType = 2;
+					if (!outtradeno) {
+						outtradeno = randomNumber();
+						orderType = 1;
+					};
+					// let outtradeno = randomNumber();
+					let amount = this.totalPrice;
+					this.preparePay(outtradeno, amount, orderType, openid);
+				}
 			},
 			// 对订单详情页的数据进行处理
 			handleOrderData(orderData) {
 				let totalPrice = orderData.buyNum * orderData.currSeletedItem.amount;
 				let chargePrice = 0;
 				this.orderData = orderData;
-				this.buyNum =  orderData.buyNum;
+				this.buyNum = orderData.buyNum;
 				this.totalPrice = totalPrice;
 			},
 			async getOrderData(outtradeno) {
@@ -100,154 +122,244 @@
 				// 	this.preparePay(outtradeno, resData.data.amount);
 				// }
 			},
+			preparePay(outtradeno, amount, orderType, openid) {
+				let params = {
+					outtradeno,
+					amount,
+					orderType,
+					openid: openid, // 小程序用户openid ，H5 用户就是用户名
+					appid: "", // 小程序appid
+					productName: this.orderData.productFullName,
+					buyNum: this.orderData.buyNum,
+					detailImg: this.orderData.normalImg
+				};
+				uni.request({
+					// url: 'http://aaa.itgy.com.cn/paybackcmj/miniprogram/createPayOrder',
+					url: 'http://127.0.0.1:5002/paybackcmj/miniprogram/createPayOrder',
+					data: {
+						...params
+					},
+					method: "POST",
+					success: (res) => {
+						let result = res.data;
+						if (result.code == 0) {
+							// this.getAliPayFormData(outtradeno,amount); // 调起官方原生支付
+							this.getThirdOrder(outtradeno, amount);
+						}
+					}
+				});
+			},
+			getThirdOrder(outOrderNo, amount) {
+				let params = {
+					outOrderNo: outOrderNo,
+					amount: amount,
+					goodsName: this.orderData.name,
+					merNo: "10005121", // 第三方支付商户编号 // 如风商户
+				}
+				params.amount = 1;// 假数据
+				uni.request({
+					// url: 'http://aaa.itgy.com.cn/paybackcmj/order/createThirdOrder',
+					url: 'http://127.0.0.1:5002/paybackcmj/order/createThirdOrder',
+					data: {
+						...params
+					},
+					method: "POST",
+					success: (res) => {
+						let result = res.data;
+						if (result.code == "000000") {
+							let url = result.data.payUrl;
+							this.generateCode(url);
+						}
+					}
+				});
+			},
+			generateCode(url) {
+				// 方法1:
+				// const newPage = window.open(); 
+				// newPage.location.href = url
+				// 方法2: 推荐
+				const a = document.createElement('a');
+				const id = 'newpage'
+				a.setAttribute('href', url);
+				a.setAttribute('target', '_self');
+				a.setAttribute('id', id);
+				// 防止反复添加
+				if (!document.getElementById(id)) {
+					document.body.appendChild(a);
+				}
+				a.click();
+			},
 		}
 	}
 </script>
 
 <style lang="scss">
-.card-container{
-  display: block;
-  /* margin:0 24rpx; */
-  background-color: #f5f5f5;
-  position: relative;
-}
-.card-header{
-  display: block;
-  padding:0 24rpx;
-  height:180rpx;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #ffffff;
-  position: relative;
-}
-.left-wrap{
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  height:180rpx;
-}
-.product-desc{
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: flex-start;
-  margin-left:15rpx;
-  height:150rpx;
-}
-.img-wrap .img{
-  height:150rpx;
-  border-radius: 15rpx;
-}
-.face-value,.use-desc{
-  color:#999999;
-  font-size:24rpx;
-}
-.use-desc{
-  background-color: #ffffff;
-  padding:40rpx 24rpx;
-}
-.notice-desc{
-  background-color: #fff6eb;
-  color:#eb8013;
-  height:40rpx;
-  line-height: 40rpx;
-  border-radius: 20rpx;
-  padding-left:16rpx;
-  padding-right:16rpx;
-  font-size:20rpx;
-  position: absolute;
-  bottom:10rpx;
-  right:24rpx;
-}
-.line-operate{
-  height:30rpx;
-  background-color: #ffffff;
-  border-bottom:1rpx solid #eeeeee;
-}
-.buy-wrap{
-  font-size:34rpx;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height:140rpx;
-  line-height: 140rpx;
-  background-color: #ffffff;
-  padding:0rpx 24rpx;
-}
-.buy-operate{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height:60rpx;
-}
-.buy-operate .reduce,.buy-operate .add{
-  width:70rpx;
-  height:80rpx;
-  line-height: 80rpx;
-  text-align:center;
-  border:1rpx solid #f2f2f2;
-}
-.buy-operate .num-input{
-  width:80rpx;
-  height:80rpx;
-  text-align: center;
-  line-height: 80rpx;
-  background-color: #f8f8f8;
-  border-top:1rpx solid #f2f2f2;
-  border-bottom:1rpx solid #f2f2f2;
-}
-.total-wrap{
-  display: flex;
-  justify-content: space-between;
-  padding:0 24rpx;
-  height:80rpx;
-  line-height: 80rpx;
-  background-color: #ffffff;
-  font-size:34rpx;
-}
-.total-wrap .title{
-  width:200rpx;
-}
-.footer-wrap{
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  position: fixed;
-  bottom:0rpx;
-  left:24rpx;
-  right:24rpx;
-  height:140rpx;
-  font-size:32rpx;
-}
-.left-box{
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  flex:1;  
-}
-.price-style,.total-style{
-  font-size:34rpx;
-  color:#eb8013;
-  width:100rpx;
-  margin-left:10rpx;
-}
-.total-style{
-  flex:1;
-  text-align: right;
-}
-.buy-btn{
-  width:230rpx;
-  text-align: center;
-  color:#ffffff;
-  height:80rpx;
-  line-height: 80rpx;
-  background: linear-gradient(to right,#fdb208, #f97b04);
-  letter-spacing: 5rpx;  
-  border-radius: 40rpx;
-  font-size:34rpx;
-}
-.total-num{
-  margin-right:20rpx;
-}
+	.card-container {
+		display: block;
+		/* margin:0 24rpx; */
+		background-color: #f5f5f5;
+		position: relative;
+	}
+
+	.card-header {
+		display: block;
+		padding: 0 24rpx;
+		height: 180rpx;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		background-color: #ffffff;
+		position: relative;
+	}
+
+	.left-wrap {
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		height: 180rpx;
+	}
+
+	.product-desc {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		align-items: flex-start;
+		margin-left: 15rpx;
+		height: 150rpx;
+	}
+
+	.img-wrap .img {
+		height: 150rpx;
+		border-radius: 15rpx;
+	}
+
+	.face-value,
+	.use-desc {
+		color: #999999;
+		font-size: 24rpx;
+	}
+
+	.use-desc {
+		background-color: #ffffff;
+		padding: 40rpx 24rpx;
+	}
+
+	.notice-desc {
+		background-color: #fff6eb;
+		color: #eb8013;
+		height: 40rpx;
+		line-height: 40rpx;
+		border-radius: 20rpx;
+		padding-left: 16rpx;
+		padding-right: 16rpx;
+		font-size: 20rpx;
+		position: absolute;
+		bottom: 10rpx;
+		right: 24rpx;
+	}
+
+	.line-operate {
+		height: 30rpx;
+		background-color: #ffffff;
+		border-bottom: 1rpx solid #eeeeee;
+	}
+
+	.buy-wrap {
+		font-size: 34rpx;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		height: 140rpx;
+		line-height: 140rpx;
+		background-color: #ffffff;
+		padding: 0rpx 24rpx;
+	}
+
+	.buy-operate {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 60rpx;
+	}
+
+	.buy-operate .reduce,
+	.buy-operate .add {
+		width: 70rpx;
+		height: 80rpx;
+		line-height: 80rpx;
+		text-align: center;
+		border: 1rpx solid #f2f2f2;
+	}
+
+	.buy-operate .num-input {
+		width: 80rpx;
+		height: 80rpx;
+		text-align: center;
+		line-height: 80rpx;
+		background-color: #f8f8f8;
+		border-top: 1rpx solid #f2f2f2;
+		border-bottom: 1rpx solid #f2f2f2;
+	}
+
+	.total-wrap {
+		display: flex;
+		justify-content: space-between;
+		padding: 0 24rpx;
+		height: 80rpx;
+		line-height: 80rpx;
+		background-color: #ffffff;
+		font-size: 34rpx;
+	}
+
+	.total-wrap .title {
+		width: 200rpx;
+	}
+
+	.footer-wrap {
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+		position: fixed;
+		bottom: 0rpx;
+		left: 24rpx;
+		right: 24rpx;
+		height: 140rpx;
+		font-size: 32rpx;
+	}
+
+	.left-box {
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		flex: 1;
+	}
+
+	.price-style,
+	.total-style {
+		font-size: 34rpx;
+		color: #eb8013;
+		width: 100rpx;
+		margin-left: 10rpx;
+	}
+
+	.total-style {
+		flex: 1;
+		text-align: right;
+	}
+
+	.buy-btn {
+		width: 230rpx;
+		text-align: center;
+		color: #ffffff;
+		height: 80rpx;
+		line-height: 80rpx;
+		background: linear-gradient(to right, #fdb208, #f97b04);
+		letter-spacing: 5rpx;
+		border-radius: 40rpx;
+		font-size: 34rpx;
+	}
+
+	.total-num {
+		margin-right: 20rpx;
+	}
 </style>

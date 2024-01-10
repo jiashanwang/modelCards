@@ -10,6 +10,7 @@ export const getOrderData = (params, config = {}) => http.post('/miniprogram/get
 export const getOrderListByType = (params, config = {}) => http.post('/miniprogram/getOrderListByType', params, config) // 获取订单列表信息
 export const getMyCardList = (params, config = {}) => http.post('/miniprogram/getMyCardList', params, config) // 获取我的卡劵订单列表
 export const getNotice = (params, config = {}) => http.post('/miniprogram/getNotice', params, config) //获取公告信息
+export const register = (params, config = {}) => http.post('/miniprogram/register', params, config) //注册
 
 // get请求列表，，注意：get请求的配置等，都在第二个参数中，详见前面解释
 export const getMenu = (data) => http.get('/ebapi/public_api/index', data) //获取菜单 举例

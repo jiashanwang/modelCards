@@ -62,8 +62,7 @@
 				getNotice({
 					keyword: ""
 				}).then((res) => {
-					debugger;
-					this.notice = res;
+					this.notice = res.data.data;
 				}).catch((err) => {})
 			},
 			/**
@@ -73,7 +72,7 @@
 				getCardList({
 					keyword: ""
 				}).then((res) => {
-					this.productList = res;
+					this.productList = res.data.data;
 				}).catch((err) => {})
 			},
 			jumpDetailPage(item) {
