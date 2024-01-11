@@ -41,12 +41,12 @@
 		},
 		methods: {
 			changePwd(){
-				if (this.password.length < 6 || this.okPwd.length < 6){
-					this.$refs.uToast.show({
-						type: "error",
-						message: "密码长度不能小于6位!"
-					});
-				}
+				// if (this.password.length < 6 || this.okPwd.length < 6){
+				// 	this.$refs.uToast.show({
+				// 		type: "error",
+				// 		message: "密码长度不能小于6位!"
+				// 	});
+				// }
 			},
 			findPwd() {
 				uni.showModal({
@@ -70,6 +70,10 @@
 				})
 				let newType = type == 1 ? 2 : 1;
 				this.operateType = newType;
+				if (type == 2){
+					this.username = "";
+					this.password = "";
+				}
 			},
 			registerAjax(type) {
 				register({
@@ -113,6 +117,7 @@
 			},
 			registerBtn(type) {
 				if (type == 2) {
+					
 					// 注册
 					if (!this.username) {
 						this.$refs.uToast.show({
@@ -128,7 +133,13 @@
 						});
 						return;
 					};
-					if (this.password != this.okPwd) {
+					if (this.password.length < 6 || this.okPwd.length < 6){
+						this.$refs.uToast.show({
+							type: "error",
+							message: "密码长度不能小于6位!"
+						});
+					};
+					if (this.password != this.okPwd) {;
 						this.$refs.uToast.show({
 							type: "error",
 							message: "两次密码输入不一致!"

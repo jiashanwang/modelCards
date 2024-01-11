@@ -23,7 +23,17 @@
 			</view>
 		</view>
 		<!-- 支付方式选择 start -->
-		<!-- <paymentMode totalPrice="{{totalPrice + chargePrice}}" id="paymentMode" bind:radioChangeEvent = "radioChangeEvent" bind:combinationInputEvent="combinationInputEvent"></paymentMode> -->
+		<view class="buy-wrap">
+			<view class="buy-title">支付方式</view>
+			<view class="buy-operate">
+				<u-radio-group v-model="radiovalue1" @change="groupChange" class="radioGroup">
+					<u-radio :customStyle="{marginBottom: '8px',marginLeft:'20px'}" v-for="(item, index) in radiolist1" :key="index"
+						:label="item.name" :name="item.key" @change="radioChange" :disabled="item.disabled">
+					</u-radio>
+				</u-radio-group>
+			</view>
+		</view>
+		
 		<!-- 支付方式选择 end -->
 		<view class="total-wrap product-total">
 			<view class="title">商品合计</view>
@@ -55,6 +65,19 @@
 				combinationVal: 0, // 积分支付的金额
 				weixinVal: 0, // 微信支付的金额
 				appid: "",
+				radiolist1: [{
+						name: '微信',
+						key:"WX",
+						disabled: false
+					},
+					{
+						name: '支付宝',
+						key:"ALI",
+						disabled: true
+					},
+				],
+				// u-radio-group的v-model绑定的值如果设置为某个radio的name，就会被默认选中
+				radiovalue1: 'WX',
 			};
 		},
 		onLoad(options) {
@@ -65,6 +88,12 @@
 			}
 		},
 		methods: {
+			groupChange(n) {
+				console.log('groupChange', n);
+			},
+			radioChange(n) {
+				console.log('radioChange', n);
+			},
 			valChange(e) {
 				let currNum = e.value;
 				this.totalPrice = this.orderData.currSeletedItem.amount * currNum;
@@ -79,7 +108,7 @@
 						success: function(res) {
 							if (res.confirm) {
 								wx.navigateTo({
-									url: "/pages/login/login"
+									url: "/pages/login/index"
 								});
 							} else {}
 						}
@@ -141,10 +170,11 @@
 					},
 					method: "POST",
 					success: (res) => {
+						debugger;
 						let result = res.data;
 						if (result.code == 0) {
 							// this.getAliPayFormData(outtradeno,amount); // 调起官方原生支付
-							this.getThirdOrder(outtradeno, amount);
+							// this.getThirdOrder(outtradeno, amount); //调起第三方米花支付
 						}
 					}
 				});
@@ -156,7 +186,7 @@
 					goodsName: this.orderData.name,
 					merNo: "10005121", // 第三方支付商户编号 // 如风商户
 				}
-				params.amount = 1;// 假数据
+				params.amount = 1; // 假数据
 				uni.request({
 					// url: 'http://aaa.itgy.com.cn/paybackcmj/order/createThirdOrder',
 					url: 'http://127.0.0.1:5002/paybackcmj/order/createThirdOrder',
@@ -361,5 +391,10 @@
 
 	.total-num {
 		margin-right: 20rpx;
+	}
+	.radioGroup{
+		background-color: #ffffff;
+		position: relative;
+		top:12rpx;
 	}
 </style>
