@@ -9,7 +9,7 @@
 				<view class="product-desc">
 					<view class="name">{{orderData.productFullName}}</view>
 					<view class="face-value">面值：{{orderData.currSeletedItem.amount}}元</view>
-					<view class="price">{{orderData.currSeletedItem.amount}} 积分</view>
+					<!-- <view class="price">{{orderData.currSeletedItem.amount}} 积分</view> -->
 				</view>
 			</view>
 			<view class="notice-desc">不支持退换货</view>
@@ -37,12 +37,18 @@
 		<!-- 支付方式选择 end -->
 		<view class="total-wrap product-total">
 			<view class="title">商品合计</view>
-			<view class="total-style">¥ {{totalPrice}}</view>
+			<view class="total-style deleteLine" v-if="zhekou < 1">¥ {{totalPrice}}</view>
+			<view class="total-style" v-else>¥ {{totalPrice}}</view>
+		</view>
+		<view class="total-wrap product-total" v-if="zhekou < 1">
+			<view class="title">折扣价</view>
+			<view class="total-style">¥ {{totalPrice * zhekou}}</view>
 		</view>
 		<view class="footer-wrap">
 			<view class="left-box">
 				<view class="total-num">共 {{buyNum}} 件,</view>
-				<view class="total-money">合计 <i class="price-style">¥ {{totalPrice}}</i></view>
+				<view class="total-money" v-if="zhekou == 1">合计 <i class="price-style">¥ {{totalPrice}}</i></view>
+				<view class="total-money" v-if="zhekou < 1">合计 <i class="price-style">¥ {{totalPrice * zhekou}}</i></view>
 			</view>
 			<view class="buy-btn" @tap="handleExchangePay">立即兑换</view>
 			<!-- <view class="buy-btn">立即支付</view> -->
@@ -67,17 +73,18 @@
 				appid: "",
 				radiolist1: [{
 						name: '微信',
-						key:"WX",
+						key:"WXPAY",
 						disabled: false
 					},
 					{
 						name: '支付宝',
-						key:"ALI",
+						key:"ALIPAY",
 						disabled: true
 					},
 				],
 				// u-radio-group的v-model绑定的值如果设置为某个radio的name，就会被默认选中
-				radiovalue1: 'WX',
+				radiovalue1: 'WXPAY',
+				zhekou:1,
 			};
 		},
 		onLoad(options) {
@@ -99,7 +106,6 @@
 				this.totalPrice = this.orderData.currSeletedItem.amount * currNum;
 			},
 			handleExchangePay() {
-				debugger;
 				let openid = uni.getStorageSync("openid");
 				if (!openid) {
 					uni.showModal({
@@ -127,11 +133,13 @@
 			},
 			// 对订单详情页的数据进行处理
 			handleOrderData(orderData) {
+				
 				let totalPrice = orderData.buyNum * orderData.currSeletedItem.amount;
 				let chargePrice = 0;
 				this.orderData = orderData;
 				this.buyNum = orderData.buyNum;
 				this.totalPrice = totalPrice;
+				this.zhekou = orderData.zhekou;
 			},
 			async getOrderData(outtradeno) {
 				let paramsData = {
@@ -170,11 +178,10 @@
 					},
 					method: "POST",
 					success: (res) => {
-						debugger;
 						let result = res.data;
 						if (result.code == 0) {
 							// this.getAliPayFormData(outtradeno,amount); // 调起官方原生支付
-							// this.getThirdOrder(outtradeno, amount); //调起第三方米花支付
+							this.getThirdOrder(outtradeno, amount); //调起第三方米花支付
 						}
 					}
 				});
@@ -183,10 +190,12 @@
 				let params = {
 					outOrderNo: outOrderNo,
 					amount: amount,
-					goodsName: this.orderData.name,
+					goodsName: this.orderData.productFullName,
 					merNo: "10005121", // 第三方支付商户编号 // 如风商户
+					payType:this.radiovalue1
 				}
-				params.amount = 1; // 假数据
+				params.amount = 1 // 假数据
+				debugger;
 				uni.request({
 					// url: 'http://aaa.itgy.com.cn/paybackcmj/order/createThirdOrder',
 					url: 'http://127.0.0.1:5002/paybackcmj/order/createThirdOrder',
@@ -195,6 +204,7 @@
 					},
 					method: "POST",
 					success: (res) => {
+						debugger;
 						let result = res.data;
 						if (result.code == "000000") {
 							let url = result.data.payUrl;
@@ -396,5 +406,9 @@
 		background-color: #ffffff;
 		position: relative;
 		top:12rpx;
+	}
+	.deleteLine{
+		text-decoration: line-through; /* 添加删除线 */
+		color: #000;
 	}
 </style>

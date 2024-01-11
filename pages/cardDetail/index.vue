@@ -79,7 +79,7 @@
 							<u--image :src="modalData.normalImg" mode="widthFix"></u--image>
 						</view>
 						<view class="product-desc">
-							<view class="integral">积分<i
+							<view class="integral">面值<i
 									class="integral-price">{{modalData.specData[currIndex].amount}}</i></view>
 
 							<view class="remained-total">库存：充足</view>
@@ -118,6 +118,7 @@
 	export default {
 		data() {
 			return {
+				zhekou:1,
 				buyNum: 1,
 				currIndex: 0,
 				show: false,
@@ -144,7 +145,7 @@
 				this.iconImg = productData.icon_img;
 				this.card_type = productData.card_type;
 				// this.setData({productData:productData,detailImg:productData.square_colour_icon,iconImg:productData.icon_img,card_type:productData.card_type,has_charge:productData.has_charge,service_charge:productData.service_charge});
-				this.getBrandEcardList();
+				this.getBrandEcardList(productData.brand_name);
 			}
 		},
 		methods: {
@@ -175,9 +176,20 @@
 			close() {
 				this.show = false;
 			},
-			getBrandEcardList() {
-				getBrandEcardList({}).then((result) => {
-					let res = result.data.data;
+			// getBrandEcardList() {
+			// 	getBrandEcardList({}).then((result) => {
+			// 		let res = result.data.data;
+			// 		res.forEach(element => {
+			// 			element.integral_price = element.amount;
+			// 			element.amount = parseFloat(element.amount);
+			// 		});
+			// 		this.specData = res;
+			// 	}).catch((err) => {})
+			// },
+			getBrandEcardList(name) {
+				getBrandEcardList({name}).then((result) => {
+					let res = result.data.data.amount_list;
+					this.zhekou = result.data.data.zhekou;
 					res.forEach(element => {
 						element.integral_price = element.amount;
 						element.amount = parseFloat(element.amount);
@@ -197,10 +209,9 @@
 					productType: this.modalData.productType,
 					iconImg: this.modalData.iconImg,
 					card_type: this.modalData.card_type,
+					zhekou:this.zhekou
 				};
 				let data = encodeURIComponent(JSON.stringify(obj))
-				console.log("obj == ")
-				console.log(obj);
 				wx.navigateTo({
 					url: "/pages/cardBuyDetail/index?data=" + data
 				});

@@ -97,7 +97,6 @@
 								this.operateType = 1;
 							}, 2000)
 						} else {
-							debugger;
 							uni.setStorageSync("openid", res.data);
 							setTimeout(() => {
 								uni.switchTab({
