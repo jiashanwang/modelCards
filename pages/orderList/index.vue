@@ -28,31 +28,33 @@
 							<view>x {{item.buy_no}}</view>
 						</view>
 					</view>
-						<view class="orderInfos commonFont">
+					<view class="orderInfos commonFont">
 						<view class="orderInfo">
 							<view class="orderItme">下单时间: {{item.create_time}}</view>
-							<view class="orderModel">积分支付</view>
+							<!-- <view class="orderModel">积分支付</view> -->
 						</view>
 					</view>
-						<view class="orderOperate" v-if="item.pay_state == 0">
+					<view class="orderOperate" v-if="item.pay_state == 0">
 						<view class="priceBox">总价:
 							<i class="totalPrice"> ¥{{item.amount}}</i>
 						</view>
 						<view class="operateBox">
-							<view class="operate refund" @tap="deleteCurrentOrder"
-								v-if="item.pay_state == 0">删除记录</view>
+							<view class="operate refund" @tap="deleteCurrentOrder(item)" v-if="item.pay_state == 0">删除记录
+							</view>
 						</view>
 					</view>
 				</view>
 				<u-line></u-line>
+				
 			</block>
 		</view>
+		<u-toast ref="uToast"></u-toast>
 	</view>
 </template>
 
 <script>
 	import {
-		getOrderListByType
+		getOrderListByType,deleteOrder
 	} from '@/config/api.js';
 	export default {
 		data() {
@@ -95,33 +97,66 @@
 			};
 		},
 		onLoad(options) {
-			this.getOrderListByType();
+			this.getOrderListByTypeAjax();
 		},
 		methods: {
-			sectionChange(index) {
-				this.curNow = index;
-				this.payState = index;
-				this.getOrderListByType();
-			},
-			getOrderListByType() {
-				let openid = uni.getStorageSync("openid");
-				if (!openid){
-					// 用户未登录
-					this.orders = [];
-					return ;
-				}
-				// let openid = "ovYh85fxwyGPxCPRjZ4uXpvmmPVU";
-				let params = {
-					openid: openid,
-					payState: this.payState
-				};
-				getOrderListByType({
-					...params
+			deleteCurrentOrder(item){
+				deleteOrder({
+					outtradeno:item.outtradeno
 				}).then((res) => {
-					this.orders = res;
+					let result = res.data;
+					if (result.code == 0){
+						this.$refs.uToast.show({
+							type: "success",
+							message: "删除成功!"
+						});
+						this.payState = 0;
+						this.getOrderListByTypeAjax();
+					}
 				}).catch((err) => {
 					this.orders = [];
 				})
+			},
+			sectionChange(index) {
+				this.curNow = index;
+				this.payState = index;
+				this.getOrderListByTypeAjax();
+			},
+			getOrderListByTypeAjax() {
+				let openid = uni.getStorageSync("openid");
+				if (!openid) {
+					// 用户未登录
+					this.orders = [];
+					uni.showModal({
+						title: "提示",
+						content: "您还未登录，请先登录!",
+						success: function(res) {
+							if (res.confirm) {
+								wx.navigateTo({
+									url: "/pages/login/index"
+								});
+							} else {}
+						}
+					})
+
+				} else {
+					let params = {
+						openid: openid,
+						payState: this.payState
+					};
+					getOrderListByType({
+						...params
+					}).then((res) => {
+						let result = res.data;
+						if (result.code == 0){
+							this.orders = result.data;
+						}else{
+							this.orders = [];
+						}
+					}).catch((err) => {
+						this.orders = [];
+					})
+				}
 			},
 		}
 	}
@@ -277,7 +312,7 @@
 
 	.orderCnt_img .img {
 		border-radius: 13rpx;
-		width:260rpx;
+		width: 260rpx;
 		// height:50rpx;
 	}
 

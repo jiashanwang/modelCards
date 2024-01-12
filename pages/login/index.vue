@@ -116,7 +116,6 @@
 			},
 			registerBtn(type) {
 				if (type == 2) {
-					
 					// 注册
 					if (!this.username) {
 						this.$refs.uToast.show({
@@ -137,6 +136,7 @@
 							type: "error",
 							message: "密码长度不能小于6位!"
 						});
+						return;
 					};
 					if (this.password != this.okPwd) {;
 						this.$refs.uToast.show({

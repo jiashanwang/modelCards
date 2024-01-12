@@ -60,6 +60,9 @@
 	import {
 		randomNumber
 	} from "@/config/tools.js"
+	import {
+		createThirdOrder,createPayOrder
+	} from '@/config/api.js';
 	export default {
 		data() {
 			return {
@@ -170,48 +173,33 @@
 					buyNum: this.orderData.buyNum,
 					detailImg: this.orderData.normalImg
 				};
-				uni.request({
-					// url: 'http://aaa.itgy.com.cn/paybackcmj/miniprogram/createPayOrder',
-					url: 'http://127.0.0.1:5002/paybackcmj/miniprogram/createPayOrder',
-					data: {
+					createPayOrder({
 						...params
-					},
-					method: "POST",
-					success: (res) => {
+					}).then((res) => {
 						let result = res.data;
 						if (result.code == 0) {
 							// this.getAliPayFormData(outtradeno,amount); // 调起官方原生支付
-							this.getThirdOrder(outtradeno, amount); //调起第三方米花支付
+							// this.getThirdOrder(outtradeno, amount); //调起第三方米花支付
 						}
-					}
-				});
+					}).catch((err) => {})
 			},
 			getThirdOrder(outOrderNo, amount) {
 				let params = {
 					outOrderNo: outOrderNo,
 					amount: amount,
 					goodsName: this.orderData.productFullName,
-					merNo: "10005121", // 第三方支付商户编号 // 如风商户
+					merAccount: "d5ee5ce45d5746b2864fae54bd0dbef9", // 第三方支付商户标识 // 如风商户
 					payType:this.radiovalue1
 				}
-				params.amount = 1 // 假数据
-				debugger;
-				uni.request({
-					// url: 'http://aaa.itgy.com.cn/paybackcmj/order/createThirdOrder',
-					url: 'http://127.0.0.1:5002/paybackcmj/order/createThirdOrder',
-					data: {
-						...params
-					},
-					method: "POST",
-					success: (res) => {
-						debugger;
-						let result = res.data;
-						if (result.code == "000000") {
-							let url = result.data.payUrl;
-							this.generateCode(url);
-						}
+				createThirdOrder({
+					...params
+				}).then((res) => {
+					let result = res.data;
+					if (result.code == "000000") {
+						let url = result.data.payUrl;
+						this.generateCode(url);
 					}
-				});
+				}).catch((err) => {})
 			},
 			generateCode(url) {
 				// 方法1:

@@ -24,10 +24,12 @@
 					<u--image :src="item.square_colour_icon" width="100%" height="100px" mode="widthFix"></u--image>
 					<view class="product-desc-container">
 						<view class="product_name">{{item.brand_name}}</view>
+						<view class="sales">{{item.total_sales}} 人已买</view>
 						<view class="product_price">
+							
 							<view class="integral_price">
 								<view class="tag">¥</view>
-								<view class="price">{{item.amount}} </view>
+								<view class="price">{{item.amount}} 起 </view>
 							</view>
 							<view class="card_type">电子卡</view>
 						</view>
@@ -87,8 +89,6 @@
 					writeoff_notice: item.writeoff_notice
 				};
 				let data = encodeURIComponent(JSON.stringify(item))
-				console.log("data=")
-				console.log(data);
 				uni.navigateTo({
 					url: "/pages/cardDetail/index?data=" + data
 				});
@@ -100,7 +100,11 @@
 	page {
 		background-color: #ffffff;
 	}
-
+	.sales{
+		font-size:24rpx;
+		margin:10rpx 0;
+		color:#cccccc;
+	}
 	.product_list {
 		display: flex;
 		justify-content: center;

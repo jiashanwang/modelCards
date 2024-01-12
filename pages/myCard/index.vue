@@ -91,7 +91,23 @@
 			};
 		},
 		onLoad() {
-			this.getMyCardList();
+			let openid = uni.getStorageSync("openid");
+			if (!openid) {
+				// 用户未登录
+				uni.showModal({
+					title: "提示",
+					content: "您还未登录，请先登录!",
+					success: function(res) {
+						if (res.confirm) {
+							wx.navigateTo({
+								url: "/pages/login/index"
+							});
+						} else {}
+					}
+				})
+			}else{
+				this.getMyCardListAjax(openid);
+			}
 		},
 		methods: {
 			closeDialogModel(){
@@ -114,8 +130,7 @@
 				this.currItem = item;
 				this.showDialog = true;
 			},
-			getMyCardList() {
-				let openid = "ovYh85fxwyGPxCPRjZ4uXpvmmPVU";
+			getMyCardListAjax(openid) {
 				let params = {
 					openid: openid,
 					searchName: this.searchInputVal
@@ -123,7 +138,10 @@
 				getMyCardList({
 					...params
 				}).then((res) => {
-					this.orders = res;
+					let result = res.data;
+					if (result.code == 0){
+						this.orders = result.data;
+					};
 				}).catch((err) => {
 					this.orders = [];
 				})

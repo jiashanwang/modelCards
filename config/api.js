@@ -11,6 +11,11 @@ export const getOrderListByType = (params, config = {}) => http.post('/miniprogr
 export const getMyCardList = (params, config = {}) => http.post('/miniprogram/getMyCardList', params, config) // 获取我的卡劵订单列表
 export const getNotice = (params, config = {}) => http.post('/miniprogram/getNotice', params, config) //获取公告信息
 export const register = (params, config = {}) => http.post('/miniprogram/register', params, config) //注册
+export const createThirdOrder = (params, config = {}) => http.post('/order/createThirdOrder', params, config) //创建三方支付订单
+export const createPayOrder = (params, config = {}) => http.post('/miniprogram/createPayOrder', params, config) // 创建支付订单
+export const deleteOrder = (params, config = {}) => http.post('/miniprogram/deleteMockOrder', params, config) // 创建支付订单
+
+
 
 // get请求列表，，注意：get请求的配置等，都在第二个参数中，详见前面解释
 export const getMenu = (data) => http.get('/ebapi/public_api/index', data) //获取菜单 举例

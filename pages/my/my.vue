@@ -24,7 +24,7 @@
 					</view>
 					<view class="more-order-types">
 						<view class="more-wrap">
-							<view class="more-order">全部订单</view>
+							<view class="more-order" @tap="buyTypeClick">全部订单</view>
 							<i class="iconfont icon-jinrujiantou"></i>
 						</view>
 					</view>
@@ -42,14 +42,14 @@
 						<view class="title">我的卡劵</view>
 					</view>
 				</view>
-			<!-- 	<u-line></u-line>
-				<view class="item myCard" @tap="myCardListClick">
+				<u-line></u-line>
+				<view class="item myCard" @tap="telClick">
 					<view class="img_cnt">
 						<u-icon name="phone" size="36" color="#00a9f1"></u-icon>
 						<view class="title">售后电话</view>
 					</view>
 				</view>
-				<u-line></u-line>
+			<!-- 	<u-line></u-line>
 				<view class="item myCard" @tap="myCardListClick">
 					<view class="img_cnt">
 						<u-icon name="question" size="34" color="#ff9900"></u-icon>
@@ -102,7 +102,26 @@
 				animationData: {},
 			}
 		},
+		onLoad(options) {
+			let openid = uni.getStorageSync("openid");
+			this.nickName = openid?openid:"立即登录";
+		},
 		methods: {
+			telClick(){
+				uni.showModal({
+					title: "提示",
+					content: "请拨打人工客服电员：19355011215",
+					success: function(res) {
+						if (res.confirm) {
+				
+						} else {
+				
+						}
+				
+					}
+				
+				})
+			},
 			login(){
 				uni.navigateTo({
 					url: "/pages/login/index",
@@ -116,7 +135,7 @@
 			},
 			buyTypeClick(index) {
 				uni.switchTab({
-					url: '/pages/orderList/index?currIndex=' + index,
+					url: '/pages/orderList/index'
 				})
 			},
 		}
