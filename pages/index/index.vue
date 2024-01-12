@@ -11,8 +11,8 @@
 		<view class="home-page-container">
 			<!-- 最新公告 -->
 			<view class="notice-wrap">
-				<view class="title">最新公告</view>
-				<view class="notice">积分按照1:1兑换 1元 = 1积分</view>
+				<view class="title">最新公告：</view>
+				<view class="notice">每个商品详情页都有使用方法和兑换说明，请仔细阅读后下单!</view>
 			</view>
 		</view>
 		<view class="product-title"> <i>———</i>
@@ -26,7 +26,6 @@
 						<view class="product_name">{{item.brand_name}}</view>
 						<view class="sales">{{item.total_sales}} 人已买</view>
 						<view class="product_price">
-							
 							<view class="integral_price">
 								<view class="tag">¥</view>
 								<view class="price">{{item.amount}} 起 </view>
@@ -181,7 +180,7 @@
 
 	#index_swiper {
 		position: relative;
-		height: 300rpx;
+		// height: 300rpx;
 		margin-top: 20rpx;
 	}
 
@@ -353,5 +352,10 @@
 		border-radius: 16rpx;
 		font-size: 18rpx;
 		margin-right: 20rpx;
+	}
+	.notice{
+		font-size:20rpx;
+		position: relative;
+		top:2px;
 	}
 </style>
