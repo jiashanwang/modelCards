@@ -158,7 +158,7 @@
 		height: 220rpx;
 		padding-top: 30rpx;
 		position: relative;
-		background-image: url("https://www.atwillpay.cn/images/changhebgimg.jpeg");
+		background-image: url("http://aaa.itgy.com.cn/images/changhebgimg.jpeg");
 		background-size: 100% 100%;
 		/*按比例缩放*/
 		background-repeat: no-repeat;

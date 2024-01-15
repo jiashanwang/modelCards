@@ -179,7 +179,7 @@
 						let result = res.data;
 						if (result.code == 0) {
 							// this.getAliPayFormData(outtradeno,amount); // 调起官方原生支付
-							// this.getThirdOrder(outtradeno, amount); //调起第三方米花支付
+							this.getThirdOrder(outtradeno, amount); //调起第三方米花支付
 						}
 					}).catch((err) => {})
 			},

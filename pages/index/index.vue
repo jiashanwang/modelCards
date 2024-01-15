@@ -59,6 +59,7 @@
 			this.getNotice();
 		},
 		methods: {
+			change(){},
 			getNotice() {
 				getNotice({
 					keyword: ""
@@ -231,7 +232,7 @@
 	}
 
 	.notice-wrap .title {
-		width: 150rpx;
+		width: 180rpx;
 		text-align: center;
 	}
 
