@@ -436,7 +436,7 @@
 
 	.orderCnt_img .img {
 		border-radius: 13rpx;
-		width: 260rpx;
+		width: 180rpx;
 		// height:180rpx!important;
 	}
 
