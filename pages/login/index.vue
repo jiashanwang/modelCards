@@ -51,7 +51,7 @@
 			findPwd() {
 				uni.showModal({
 					title: "提示",
-					content: "重置密码请联系管理员：19355011215",
+					content: "重置密码请联系管理员：19814793205",
 					success: function(res) {
 						if (res.confirm) {
 

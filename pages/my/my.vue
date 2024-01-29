@@ -110,7 +110,7 @@
 			telClick(){
 				uni.showModal({
 					title: "提示",
-					content: "请拨打人工客服电员：19355011215",
+					content: "请拨打人工客服电员：19814793205",
 					success: function(res) {
 						if (res.confirm) {
 				
