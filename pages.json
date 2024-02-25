@@ -59,11 +59,20 @@
 				"enablePullDownRefresh" : false,
 				"navigationBarBackgroundColor": "#ffffff"
 			}
+		},
+		{
+			"path" : "pages/myCurrency/index",
+			"style" : 
+			{
+				"navigationBarTitleText" : "我的奖励",
+				"enablePullDownRefresh" : false,
+				"navigationBarBackgroundColor": "#ffffff"
+			}
 		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "如风数卡",
+		"navigationBarTitleText": "顺卡乐选",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	},

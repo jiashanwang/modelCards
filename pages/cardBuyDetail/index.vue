@@ -77,7 +77,7 @@
 				radiolist1: [{
 						name: '微信',
 						key:"WXPAY",
-						disabled: false
+						disabled: true
 					},
 					{
 						name: '支付宝',

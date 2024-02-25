@@ -49,7 +49,14 @@
 						<view class="title">售后电话</view>
 					</view>
 				</view>
-			<!-- 	<u-line></u-line>
+				<u-line></u-line>
+				<view class="item myCard" @tap="myCurrencyClick">
+					<view class="img_cnt">
+						<u-icon name="rmb-circle-fill" size="34" color="#00a9f1"></u-icon>
+						<view class="title">我的奖励</view>
+					</view>
+				</view>
+				<!-- <u-line></u-line>
 				<view class="item myCard" @tap="myCardListClick">
 					<view class="img_cnt">
 						<u-icon name="question" size="34" color="#ff9900"></u-icon>
@@ -58,10 +65,6 @@
 				</view> -->
 			</view>
 		</view>
-
-
-
-
 	</view>
 </template>
 
@@ -107,6 +110,12 @@
 			this.nickName = openid?openid:"立即登录";
 		},
 		methods: {
+			// 我的奖励
+			myCurrencyClick(){
+				uni.navigateTo({
+					url: '/pages/myCurrency/index',
+				})
+			},
 			telClick(){
 				uni.showModal({
 					title: "提示",
