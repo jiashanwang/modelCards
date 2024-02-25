@@ -49,7 +49,8 @@
 				notice:"积分按照1:1兑换 1元 = 1积分",
 				keyword: "搜索大牌卡劵",
 				swiperList: [
-					"../../static/dapaikajuan_banner.jpeg"
+					"../../static/dapaikajuan_banner.jpeg",
+					"../../static/shitinghyzhutu.jpeg"
 				],
 				productList: [],
 			}

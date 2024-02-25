@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="item">
-			<u--input placeholder="请输入您的登录账户" prefixIcon="account" prefixIconStyle="font-size: 22px;color: #909399"
+			<u--input :placeholder="placeholder" prefixIcon="account" prefixIconStyle="font-size: 22px;color: #909399"
 				v-model="username" @change="change"></u--input>
 		</view>
 		<view class="item pwd">
@@ -33,6 +33,7 @@
 	export default {
 		data() {
 			return {
+				placeholder:"请输入您的登录账户",
 				operateType: 1, // 操作类型，1 登录，2注册
 				username: "",
 				password: "",
@@ -70,6 +71,11 @@
 				})
 				let newType = type == 1 ? 2 : 1;
 				this.operateType = newType;
+				if (newType == 1){
+					this.placeholder="请输入您的登录账户";
+				}else{
+					this.placeholder = "请输入您的手机号码";
+				};
 				if (type == 2){
 					this.username = "";
 					this.password = "";
@@ -116,7 +122,7 @@
 			},
 			registerBtn(type) {
 				if (type == 2) {
-					// 注册
+					// 注册					
 					if (!this.username) {
 						this.$refs.uToast.show({
 							type: "error",

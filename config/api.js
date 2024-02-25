@@ -14,6 +14,7 @@ export const register = (params, config = {}) => http.post('/miniprogram/registe
 export const createThirdOrder = (params, config = {}) => http.post('/order/createThirdOrder', params, config) //创建三方支付订单
 export const createPayOrder = (params, config = {}) => http.post('/miniprogram/createPayOrder', params, config) // 创建支付订单
 export const deleteOrder = (params, config = {}) => http.post('/miniprogram/deleteMockOrder', params, config) // 创建支付订单
+export const getMyCurrencyByUser = (params, config = {}) => http.post('/miniprogram/getMyCurrencyByUser', params, config) // 获取当前用户佣金
 
 
 

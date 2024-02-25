@@ -2,7 +2,7 @@
 	<view>
 		<view class="myCurrency">
 		  <view class="total">
-		    <view class="remain">账户余额</view>
+		    <view class="remain">账户佣金</view>
 		    <view class="num">{{ total }} 元</view>
 		  </view>
 		  <view class="currencyDesc">
@@ -43,7 +43,7 @@
 		    <view class="adminDesc">自动提现功能暂未开通</view>
 		    <view class="adminDesc1">请添加管理员微信进行手动打款</view>
 		    <view class="desc">
-		      <view class="descTitle">微信 :</view>
+		      <view class="descTitle">微信号 :</view>
 		      <view class="descCnt">{{platAdminPhone}}</view>
 		    </view>
 		    <view class="makePhoneOperate">
@@ -52,27 +52,77 @@
 		    </view>
 		  </view>
 		</view>
+		<view>
+			<!-- <u-notify message="佣金达到 50 元后才可以提现哦 !" :show="show"></u-notify> -->
+			<u-notify ref="uNotify" message="Hi uView"></u-notify>
+		</view>
+		
 	</view>
 </template>
 
 <script>
+	import {
+		getMyCurrencyByUser
+	} from '@/config/api.js';
 	export default {
 		data() {
 			return {
 				total:0,
 				flag:false,
-				platAdminPhone:"yutingwen1215"
+				platAdminPhone:"yutingwen1215",
+				show:false
 			};
 		},
+		onLoad(options) {
+			this.getMyCurrencyByUserInfo();
+		},
 		methods:{
+			// 提现
 			pickMoneyClick(){
-				this.flag = true;
+				if (this.total < 50){
+				  this.$refs.uNotify.warning ('佣金达到 50 元后才可以提现哦 !')
+				}else {
+					this.flag = true;
+				}
 			},
 			closeModel(){
 				this.flag = false;
 			},
+			getMyCurrencyByUserInfo() {
+				let openid = uni.getStorageSync("openid");
+				if (!openid) {
+					// 用户未登录
+					this.total = 0;
+					uni.showModal({
+						title: "提示",
+						content: "您还未登录，请先登录!",
+						success: function(res) {
+							if (res.confirm) {
+								wx.navigateTo({
+									url: "/pages/login/index"
+								});
+							} else {}
+						}
+					})
+				} else {
+					let params = {
+						openid: openid,
+					};
+					getMyCurrencyByUser({
+						...params
+					}).then((res) => {
+						let result = res.data;
+						if (result.code == 0){
+							this.total = result.data;
+						}else{
+							this.total = 0;
+						}
+					}).catch((err) => {
+						this.orders = 0;
+					})
+				}
+			},
 		},
-		
 	}
 </script>
 
