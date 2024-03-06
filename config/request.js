@@ -4,8 +4,10 @@ module.exports = (vm) => {
 	uni.$u.http.setConfig((config) => {
 		/* config 为默认全局配置*/
 		// config.baseURL = 'http://127.0.0.1:5002/paybackcmj'; /* 根域名 本地环境*/
-		// config.baseURL = 'https://www.guoshengpay.cn/paybackcmj'; /* 根域名 线上环境*/
-		config.baseURL = 'https://www.tinganpay.cn/paybackcmj'; /* 根域名 线上环境*/
+		// config.baseURL = 'https://card.chishunpay.com/paybackcmj'; /* 根域名 线上环境*/
+		// config.baseURL = 'https://www.xfhuixuan.cn/paybackcmj'; /* 根域名 线上环境*/
+		config.baseURL = 'http://aaa.itgy.com.cn/paybackcmj'; /* 根域名 线上环境*/
+		// config.baseURL = 'https://www.hbxingrui.cn/paybackcmj'; /* 根域名 线上环境*/
 		return config
 	})
 

@@ -113,7 +113,7 @@
 					}).then((res) => {
 						let result = res.data;
 						if (result.code == 0){
-							this.total = result.data;
+							this.total = parseInt(result.data);
 						}else{
 							this.total = 0;
 						}

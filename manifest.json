@@ -74,7 +74,7 @@
         "title" : "顺卡乐选",
         "router" : {
             "mode" : "hash",
-            "base" : "/card/"
+            "base" : "/rufengcard/"
         }
     }
 }

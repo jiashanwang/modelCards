@@ -100,7 +100,7 @@
 					<view class="buy-wrap">
 						<view class="buy-title">购买数量</view>
 						<view class="buy-operate">
-							<u-number-box v-model="buyNum" @change="valChange" integer></u-number-box>
+							<u-number-box v-model="buyNum" disabled="" @change="valChange" integer></u-number-box>
 						</view>
 					</view>
 					<!-- 立即兑换 -->
@@ -209,7 +209,7 @@
 					productType: this.modalData.productType,
 					iconImg: this.modalData.iconImg,
 					card_type: this.modalData.card_type,
-					zhekou:this.zhekou
+					zhekou:this.zhekou,
 				};
 				let data = encodeURIComponent(JSON.stringify(obj))
 				wx.navigateTo({

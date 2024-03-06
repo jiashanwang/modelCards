@@ -7,8 +7,11 @@
 					<image class="img" mode="heightFix" :src="orderData.normalImg"></image>
 				</view>
 				<view class="product-desc">
-					<view class="name">{{orderData.productFullName}}</view>
-					<view class="face-value">面值：{{orderData.currSeletedItem.amount}}元</view>
+					<view class="name">{{orderData.productFullName}}{{orderData.currSeletedItem.amount}}</view>
+					<!-- <view class="face-value">面值：{{orderData.currSeletedItem.amount}}元</view> -->
+					<view class="face-value" v-if="coupon > 0">规格：内含{{orderData.currSeletedItem.buy_price}}元电子卡 + {{orderData.currSeletedItem.coupon}}元{{etypeName}} </view>
+					<view class="face-value" v-else>面值：{{orderData.currSeletedItem.amount}}元电子卡 </view>
+					
 					<!-- <view class="price">{{orderData.currSeletedItem.amount}} 积分</view> -->
 				</view>
 			</view>
@@ -19,7 +22,13 @@
 		<view class="buy-wrap">
 			<view class="buy-title">购买数量</view>
 			<view class="buy-operate">
-				<u-number-box v-model="buyNum" @change="valChange" integer></u-number-box>
+				<u-number-box v-model="buyNum" disabled="" @change="valChange" integer></u-number-box>
+			</view>
+		</view>
+		<view class="buy-wrap buy_notice">
+			<view class="buy-title"></view>
+			<view class="buy-operate redColor">
+				活动促销，单笔订单限购一件！
 			</view>
 		</view>
 		<!-- 支付方式选择 start -->
@@ -36,19 +45,30 @@
 		
 		<!-- 支付方式选择 end -->
 		<view class="total-wrap product-total">
-			<view class="title">商品合计</view>
-			<view class="total-style deleteLine" v-if="zhekou < 1">¥ {{totalPrice}}</view>
+			<view class="title">商品售价</view>
+			<!-- <view class="total-style deleteLine" v-if="zhekou < 1">¥ {{totalPrice}}</view>
+			<view class="total-style" v-else>¥ {{totalPrice}}</view> -->
+			<view class="total-style deleteLine" v-if="coupon > 0">¥ {{totalPrice}}</view>
 			<view class="total-style" v-else>¥ {{totalPrice}}</view>
 		</view>
-		<view class="total-wrap product-total" v-if="zhekou < 1">
+	<!-- 	<view class="total-wrap product-total" v-if="zhekou < 1">
 			<view class="title">折扣价</view>
 			<view class="total-style">¥ {{totalPrice * zhekou}}</view>
+		</view> -->
+		<view class="total-wrap product-total"  v-if="coupon > 0">
+			<view class="title">折扣价</view>
+			<view class="total-style">¥ {{zhekouPrice}}</view>
+			<!-- <view class="total-style" v-if = "coupon == 0">¥ {{totalPrice}}</view> -->
 		</view>
 		<view class="footer-wrap">
 			<view class="left-box">
 				<view class="total-num">共 {{buyNum}} 件,</view>
-				<view class="total-money" v-if="zhekou == 1">合计 <i class="price-style">¥ {{totalPrice}}</i></view>
-				<view class="total-money" v-if="zhekou < 1">合计 <i class="price-style">¥ {{totalPrice * zhekou}}</i></view>
+				<view class="total-money" v-if="coupon > 0">合计 <i class="price-style">¥ {{zhekouPrice}}</i></view>
+				<view class="total-money" v-if="coupon == 0">合计 <i class="price-style">¥ {{totalPrice}}</i></view>
+			<!-- 	<view class="total-money" v-if="zhekou == 1">合计 <i class="price-style">¥ {{totalPrice}}</i></view>
+				<view class="total-money" v-if="zhekou < 1">合计 <i class="price-style">¥ {{totalPrice * zhekou}}</i></view> -->
+				<!-- <view class="total-money" v-if ="coupon > 0">合计 <i class="price-style">¥ {{zhekouPrice}}</i></view>
+				<view class="total-money" v-if ="coupon == 0">合计 <i class="price-style">¥ {{totalPrice}}</i></view> -->
 			</view>
 			<view class="buy-btn" @tap="handleExchangePay">立即兑换</view>
 			<!-- <view class="buy-btn">立即支付</view> -->
@@ -61,7 +81,7 @@
 		randomNumber
 	} from "@/config/tools.js"
 	import {
-		createThirdOrder,createPayOrder
+		createThirdOrder,createPayOrder,createJingXiuOrder
 	} from '@/config/api.js';
 	export default {
 		data() {
@@ -74,20 +94,25 @@
 				combinationVal: 0, // 积分支付的金额
 				weixinVal: 0, // 微信支付的金额
 				appid: "",
+				specsId:484, // 美团10元卷
 				radiolist1: [{
 						name: '微信',
-						key:"WXPAY",
-						disabled: true
+						key:"wxpay",
+						disabled: false
 					},
 					{
 						name: '支付宝',
-						key:"ALIPAY",
+						key:"alipay",
 						disabled: true
 					},
 				],
+				etypeList:["优惠券", "抵扣劵", "满减卷"],
 				// u-radio-group的v-model绑定的值如果设置为某个radio的name，就会被默认选中
-				radiovalue1: 'WXPAY',
+				radiovalue1: 'wxpay',
 				zhekou:1,
+				etypeName:"优惠券",
+				zhekouPrice:0,
+				coupon:0,
 			};
 		},
 		onLoad(options) {
@@ -96,8 +121,12 @@
 				let orderData = JSON.parse(decodeURIComponent(options.data));
 				this.handleOrderData(orderData);
 			}
+			this.etypeName = this.getRandomElement(this.etypeList);
 		},
 		methods: {
+			getRandomElement(arr) {
+			    return arr[Math.floor(Math.random() * arr.length)];
+			},
 			groupChange(n) {
 				console.log('groupChange', n);
 			},
@@ -124,35 +153,39 @@
 					})
 				} else {
 					// 临时关闭 begin
-					uni.showModal({
-						title: "提示",
-						content: "系统维护，临时关闭!",
-						success: function(res) {
-							if (res.confirm) {
+					// uni.showModal({
+					// 	title: "提示",
+					// 	content: "系统维护，临时关闭!",
+					// 	success: function(res) {
+					// 		if (res.confirm) {
 							
-							} else {}
-						}
-					})
+					// 		} else {}
+					// 	}
+					// })
 					// 临时关闭 end
-					// let outtradeno = window.sessionStorage.getItem("outOrderNo");
-					// let orderType = 2;
-					// if (!outtradeno) {
-					// 	outtradeno = randomNumber();
-					// 	orderType = 1;
-					// };
-					// // let outtradeno = randomNumber();
-					// let amount = this.totalPrice;
-					// this.preparePay(outtradeno, amount, orderType, openid);
+					let outtradeno = window.sessionStorage.getItem("outOrderNo");
+					let orderType = 2;
+					if (!outtradeno) {
+						outtradeno = randomNumber();
+						orderType = 1;
+					};
+					// let outtradeno = randomNumber();
+					let amount = this.totalPrice;
+					this.preparePay(outtradeno, amount, orderType, openid);
 				}
 			},
 			// 对订单详情页的数据进行处理
 			handleOrderData(orderData) {
-				
 				let totalPrice = orderData.buyNum * orderData.currSeletedItem.amount;
 				let chargePrice = 0;
 				this.orderData = orderData;
 				this.buyNum = orderData.buyNum;
 				this.totalPrice = totalPrice;
+				this.specsId = orderData.currSeletedItem.specs_id;
+				if (totalPrice > 100){
+					this.coupon = orderData.currSeletedItem.coupon;
+					this.zhekouPrice = orderData.currSeletedItem.buy_price;
+				};
 				this.zhekou = orderData.zhekou;
 			},
 			async getOrderData(outtradeno) {
@@ -174,15 +207,28 @@
 				// }
 			},
 			preparePay(outtradeno, amount, orderType, openid) {
+				let productName = "";
+				let handleAmount = 0;
+				if (this.coupon > 0){
+					productName = this.orderData.productFullName + amount + "(内含" + this.zhekouPrice + "元电子卡" +"+" + this.coupon + "元" + this.etypeName + ")";
+					handleAmount = this.zhekouPrice;
+				}else {
+					productName = this.orderData.productFullName + amount + "(内含" + amount + "元电子卡)" ;
+					handleAmount = amount;
+				};
+				
 				let params = {
 					outtradeno,
-					amount,
+					// amount:this.zhekouPrice,
+					amount:handleAmount,
 					orderType,
 					openid: openid, // 小程序用户openid ，H5 用户就是用户名
 					appid: "", // 小程序appid
-					productName: this.orderData.productFullName,
+					productName:productName,
+					// productName: this.orderData.productFullName + amount + "(内含" + this.zhekouPrice + "元电子卡" +"+" + this.coupon + "元" + this.etypeName + ")",
 					buyNum: this.orderData.buyNum,
-					detailImg: this.orderData.normalImg
+					detailImg: this.orderData.normalImg,
+					specsId:this.specsId
 				};
 					createPayOrder({
 						...params
@@ -190,15 +236,16 @@
 						let result = res.data;
 						if (result.code == 0) {
 							// this.getAliPayFormData(outtradeno,amount); // 调起官方原生支付
-							this.getThirdOrder(outtradeno, amount); //调起第三方米花支付
+							// this.getThirdOrder(outtradeno, amount); //调起第三方米花支付
+							this.getJingXiuOrder(outtradeno, amount); // 调用第三方支付精秀
 						}
 					}).catch((err) => {})
 			},
 			getThirdOrder(outOrderNo, amount) {
 				let params = {
 					outOrderNo: outOrderNo,
-					amount: amount,
-					goodsName: this.orderData.productFullName,
+					amount: amount * this.zhekou,
+					goodsName: this.orderData.productFullName + "(" + amount + "面值)",
 					merAccount: "d5ee5ce45d5746b2864fae54bd0dbef9", // 第三方支付商户标识 // 如风商户
 					payType:this.radiovalue1
 				}
@@ -208,6 +255,35 @@
 					let result = res.data;
 					if (result.code == "000000") {
 						let url = result.data.payUrl;
+						this.generateCode(url);
+					}
+				}).catch((err) => {})
+			},
+			getJingXiuOrder(outtradeno, amount){
+				let productName = "";
+				let handleAmount = 0;
+				if (this.coupon > 0){
+					productName = this.orderData.productFullName + amount + "(内含" + this.zhekouPrice + "元电子卡" +"+" + this.coupon + "元" + this.etypeName + ")";
+					handleAmount = this.zhekouPrice;
+				}else {
+					productName = this.orderData.productFullName + amount + "(内含" + amount + "元电子卡)" ;
+					handleAmount = amount;
+				};
+				let params = {
+					outOrderNo: outtradeno,
+					amount: handleAmount,
+					// amount: amount * this.zhekou,
+					goods_name:productName,
+					// goods_name: this.orderData.productFullName + "(" + amount + "面值)",
+					merAccount: "", // 第三方支付商户标识 // 如风商户
+					payType:this.radiovalue1
+				}
+				createJingXiuOrder({
+					...params
+				}).then((res) => {
+					let result = res.data;
+					if (result.code == 0) {
+						let url = result.data.pay_url;
 						this.generateCode(url);
 					}
 				}).catch((err) => {})
@@ -293,7 +369,7 @@
 		padding-right: 16rpx;
 		font-size: 20rpx;
 		position: absolute;
-		bottom: 10rpx;
+		bottom: -20rpx;
 		right: 24rpx;
 	}
 
@@ -312,6 +388,10 @@
 		line-height: 140rpx;
 		background-color: #ffffff;
 		padding: 0rpx 24rpx;
+	}
+	.buy_notice{
+		height: 0rpx;
+		font-size:24rpx;
 	}
 
 	.buy-operate {
@@ -409,5 +489,8 @@
 	.deleteLine{
 		text-decoration: line-through; /* 添加删除线 */
 		color: #000;
+	}
+	.redColor{
+		color:#eb8013;
 	}
 </style>
