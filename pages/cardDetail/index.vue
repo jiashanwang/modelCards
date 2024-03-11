@@ -2,51 +2,53 @@
 	<view>
 		<view class="card-detail-warp">
 			<view class="header">
-				<view class="img-wrap">
+			<!-- 	<view class="img-wrap">
 					<u--image mode="widthFix" :src="detailImg"></u--image>
+				</view> -->
+				<view id="index_swiper">
+					<u-swiper :list="swiperList" @change="change" @click="click"></u-swiper>
 				</view>
 				<view class="card-title">{{productData.brand_name}}</view>
-				<view class="card-desc mt20 flexBetween">
+				<!-- <view class="card-desc mt20 flexBetween">
 					<view class="used-desc">
-						<!-- <i class="iconfont icon-chacha"></i> -->
 						<u-icon name="close-circle" color="#ff0000" size="16"></u-icon><i class="text">不支持退换</i>
 					</view>
 					<view class="used-desc">
-						<!-- <i class="iconfont icon-duihao"></i> -->
 						<u-icon name="checkmark-circle" color="#a0cfff" size="16"></u-icon><i class="text">可多次使用</i>
 					</view>
 					<view class="used-desc">
 						<u-icon name="checkmark-circle" color="#a0cfff" size="16"></u-icon><i class="text">支持到店核销</i>
 					</view>
-				</view>
+				</view> -->
 			</view>
 			<view class="line-operate"></view>
 			<view class="face-value-select flexBetween" @tap="showFaceValList">
 				<view class="selet-desc">
 					<view class="select-title1">选择:</view>
-					<view class="select-title2">选择兑换面值</view>
-					<view class="select-face">共 {{specData.length}} 种面值可选</view>
+					<view class="select-title2">选择版本类型</view>
+					<view class="select-face">共 {{specData.length}} 种版本可选</view>
 				</view>
 				<i class="iconfont icon-jinrujiantou"></i>
 			</view>
 			<view class="line-operate1"></view>
 			<!-- 兑换流程和须知 -->
 			<view class="redemption-process">
+				
 				<view class="line-operate1"></view>
 				<view class="need-notice">
-					<view class="title1">兑换须知</view>
+					<view class="title1">服务优势</view>
 					<view class="title1-list">
 						<block v-for="(item,index) in productData.exchange_notice" :key="index">
 							<view class="title1-item">
 								<view class="title1-name">{{item.name}}</view>
-								<view class="title1-content">{{item.content}}</view>
+								<view class="title1-content youshi">{{item.content}}</view>
 							</view>
 						</block>
 					</view>
 				</view>
 				<view class="line-operate2"></view>
 				<view class="need-notice">
-					<view class="title1">核销须知</view>
+					<view class="title1">服务内容</view>
 					<view class="title1-list">
 						<block v-for="(item,index) in productData.writeoff_notice" :key="index">
 							<view class="title2-item">
@@ -75,14 +77,14 @@
 				<view class="popupBox">
 					<!-- 内容 -->
 					<view class="left-cnt" v-if="show">
-						<view class="left-img mr20">
+					<!-- 	<view class="left-img mr20">
 							<u--image :src="modalData.normalImg" mode="widthFix"></u--image>
-						</view>
+						</view> -->
 						<view class="product-desc">
-							<view class="integral">面值<i
+							<view class="integral">{{modalData.specData[currIndex].version}}<i
 									class="integral-price">{{modalData.specData[currIndex].amount}}</i></view>
 
-							<view class="remained-total">库存：充足</view>
+							<!-- <view class="remained-total">库存：充足</view> -->
 						</view>
 					</view>
 					<view class="line-operate line-operate1"></view>
@@ -100,7 +102,7 @@
 					<view class="buy-wrap">
 						<view class="buy-title">购买数量</view>
 						<view class="buy-operate">
-							<u-number-box v-model="buyNum" disabled="" @change="valChange" integer></u-number-box>
+							<u-number-box v-model="buyNum" @change="valChange" integer></u-number-box>
 						</view>
 					</view>
 					<!-- 立即兑换 -->
@@ -113,7 +115,7 @@
 
 <script>
 	import {
-		getBrandEcardList
+		getSoftEcardList
 	} from "@/config/api.js"
 	export default {
 		data() {
@@ -134,16 +136,20 @@
 		},
 		onLoad(options) {
 			if (options.data) {
+				
 				let productData = JSON.parse(decodeURIComponent(options.data));
 				uni.setNavigationBarTitle({
 					title: productData.brand_name
 				})
+				debugger;
 				this.productData = productData;
 				console.log("productData==")
 				console.log(productData)
-				this.detailImg = productData.square_colour_icon;
-				this.iconImg = productData.icon_img;
+				this.detailImg = productData.circular_colour_icon;
+				this.iconImg = productData.circular_colour_icon;
 				this.card_type = productData.card_type;
+				this.swiperList = productData.images;
+				
 				// this.setData({productData:productData,detailImg:productData.square_colour_icon,iconImg:productData.icon_img,card_type:productData.card_type,has_charge:productData.has_charge,service_charge:productData.service_charge});
 				this.getBrandEcardList(productData.brand_name);
 			}
@@ -187,7 +193,7 @@
 			// 	}).catch((err) => {})
 			// },
 			getBrandEcardList(name) {
-				getBrandEcardList({name}).then((result) => {
+				getSoftEcardList({name}).then((result) => {
 					let res = result.data.data.amount_list;
 					this.zhekou = result.data.data.zhekou;
 					res.forEach(element => {
@@ -203,14 +209,16 @@
 				let obj = {
 					buyNum: this.buyNum,
 					productFullName: this.modalData.productFullName,
-					normalImg: this.modalData.normalImg,
+					normalImg: this.detailImg,
 					currSeletedItem: specsData[this.currIndex],
 					pid: this.modalData.pid,
 					productType: this.modalData.productType,
-					iconImg: this.modalData.iconImg,
+					iconImg: this.detailImg,
 					card_type: this.modalData.card_type,
 					zhekou:this.zhekou,
+					
 				};
+				debugger;
 				let data = encodeURIComponent(JSON.stringify(obj))
 				wx.navigateTo({
 					url: "/pages/cardBuyDetail/index?data=" + data
@@ -313,6 +321,8 @@
 
 	.header .card-title {
 		font-size: 36rpx;
+		
+		padding:30rpx 0;
 		// margin-top: 30rpx;
 	}
 
@@ -694,5 +704,14 @@
 
 	.no-in-stock {
 		background: #dcdcdc;
+	}
+	#index_swiper {
+		position: relative;
+		// height: 300rpx;
+		margin-top: 20rpx;
+	}
+	.youshi{
+		position: relative;
+		top:8rpx;
 	}
 </style>

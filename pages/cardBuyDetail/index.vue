@@ -7,10 +7,10 @@
 					<image class="img" mode="heightFix" :src="orderData.normalImg"></image>
 				</view>
 				<view class="product-desc">
-					<view class="name">{{orderData.productFullName}}{{orderData.currSeletedItem.amount}}</view>
+					<view class="name">{{orderData.productFullName}} <text class="versionColor">【{{orderData.currSeletedItem.version}}】</text></view>
 					<!-- <view class="face-value">面值：{{orderData.currSeletedItem.amount}}元</view> -->
-					<view class="face-value" v-if="coupon > 0">规格：内含{{orderData.currSeletedItem.buy_price}}元电子卡 + {{orderData.currSeletedItem.coupon}}元{{etypeName}} </view>
-					<view class="face-value" v-else>面值：{{orderData.currSeletedItem.amount}}元电子卡 </view>
+					<!-- <view class="face-value" v-if="coupon > 0">规格：内含{{orderData.currSeletedItem.buy_price}}元电子卡 + {{orderData.currSeletedItem.coupon}}元{{etypeName}} </view> -->
+					<view class="face-value redColor">金额：{{orderData.currSeletedItem.amount}} </view>
 					
 					<!-- <view class="price">{{orderData.currSeletedItem.amount}} 积分</view> -->
 				</view>
@@ -18,19 +18,19 @@
 			<view class="notice-desc">不支持退换货</view>
 		</view>
 		<view class="line-operate"></view>
-		<view class="use-desc">支付成功后，可前往 "个人中心 - 我的卡劵 - 查看详情" 使用</view>
+		<view class="use-desc">支付成功后，可前往 "个人中心 - 我的订单 - 查看使用"</view>
 		<view class="buy-wrap">
 			<view class="buy-title">购买数量</view>
 			<view class="buy-operate">
-				<u-number-box v-model="buyNum" disabled="" @change="valChange" integer></u-number-box>
+				<u-number-box v-model="buyNum" @change="valChange" integer></u-number-box>
 			</view>
 		</view>
-		<view class="buy-wrap buy_notice">
+	<!-- 	<view class="buy-wrap buy_notice">
 			<view class="buy-title"></view>
 			<view class="buy-operate redColor">
 				活动促销，单笔订单限购一件！
 			</view>
-		</view>
+		</view> -->
 		<!-- 支付方式选择 start -->
 		<view class="buy-wrap">
 			<view class="buy-title">支付方式</view>
@@ -63,14 +63,10 @@
 		<view class="footer-wrap">
 			<view class="left-box">
 				<view class="total-num">共 {{buyNum}} 件,</view>
-				<view class="total-money" v-if="coupon > 0">合计 <i class="price-style">¥ {{zhekouPrice}}</i></view>
-				<view class="total-money" v-if="coupon == 0">合计 <i class="price-style">¥ {{totalPrice}}</i></view>
-			<!-- 	<view class="total-money" v-if="zhekou == 1">合计 <i class="price-style">¥ {{totalPrice}}</i></view>
-				<view class="total-money" v-if="zhekou < 1">合计 <i class="price-style">¥ {{totalPrice * zhekou}}</i></view> -->
-				<!-- <view class="total-money" v-if ="coupon > 0">合计 <i class="price-style">¥ {{zhekouPrice}}</i></view>
-				<view class="total-money" v-if ="coupon == 0">合计 <i class="price-style">¥ {{totalPrice}}</i></view> -->
+				<view class="total-money" >合计 <i class="price-style">¥ {{totalPrice}}</i></view>
+			
 			</view>
-			<view class="buy-btn" @tap="handleExchangePay">立即兑换</view>
+			<view class="buy-btn" @tap="handleExchangePay">立即支付</view>
 			<!-- <view class="buy-btn">立即支付</view> -->
 		</view>
 	</view>
@@ -95,20 +91,26 @@
 				weixinVal: 0, // 微信支付的金额
 				appid: "",
 				specsId:484, // 美团10元卷
-				radiolist1: [{
-						name: '微信',
-						key:"wxpay",
-						disabled: false
-					},
+				radiolist1: [
+					// {
+					// 	name: '微信',
+					// 	key:"wxpay",
+					// 	disabled: false
+					// },
+					// {
+					// 	name: '支付宝',
+					// 	key:"alipay",
+					// 	disabled: true
+					// },
 					{
-						name: '支付宝',
-						key:"alipay",
-						disabled: true
+						name: '快捷支付',
+						key:"cardpay",
+						disabled: false
 					},
 				],
 				etypeList:["优惠券", "抵扣劵", "满减卷"],
 				// u-radio-group的v-model绑定的值如果设置为某个radio的name，就会被默认选中
-				radiovalue1: 'wxpay',
+				radiovalue1: 'cardpay',
 				zhekou:1,
 				etypeName:"优惠券",
 				zhekouPrice:0,
@@ -237,7 +239,7 @@
 						if (result.code == 0) {
 							// this.getAliPayFormData(outtradeno,amount); // 调起官方原生支付
 							// this.getThirdOrder(outtradeno, amount); //调起第三方米花支付
-							this.getJingXiuOrder(outtradeno, amount); // 调用第三方支付精秀
+							// this.getJingXiuOrder(outtradeno, amount); // 调用第三方支付精秀
 						}
 					}).catch((err) => {})
 			},
@@ -351,7 +353,7 @@
 	.face-value,
 	.use-desc {
 		color: #999999;
-		font-size: 24rpx;
+		// font-size: 24rpx;
 	}
 
 	.use-desc {
@@ -491,6 +493,9 @@
 		color: #000;
 	}
 	.redColor{
+		color:#eb8013;
+	}
+	.versionColor{
 		color:#eb8013;
 	}
 </style>

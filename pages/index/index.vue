@@ -21,16 +21,16 @@
 		<view class="product_list">
 			<block v-for="(item, index) in productList" :key="index">
 				<view class="product-item" @tap="jumpDetailPage(item)">
-					<u--image :src="item.square_colour_icon" width="100%" height="100px" mode="widthFix"></u--image>
+					<u--image :src="item.circular_colour_icon" width="100%" height="100px" mode="widthFix"></u--image>
 					<view class="product-desc-container">
 						<view class="product_name">{{item.brand_name}}</view>
-						<view class="sales">{{item.total_sales}} 人已买</view>
+						<!-- <view class="sales">{{item.total_sales}} 人已买</view> -->
 						<view class="product_price">
 							<view class="integral_price">
 								<view class="tag">¥</view>
-								<view class="price">{{item.amount}} 起 </view>
+								<view class="price">{{item.amount}} </view>
 							</view>
-							<view class="card_type">电子卡</view>
+							<!-- <view class="card_type">电子卡</view> -->
 						</view>
 					</view>
 				</view>
@@ -41,7 +41,7 @@
 
 <script>
 	import {
-		getCardList,getNotice
+		getCardList,getNotice,getSoftList
 	} from '@/config/api.js';
 	export default {
 		data() {
@@ -72,7 +72,7 @@
 			 * 获取卡劵列表
 			 */
 			getCardList() {
-				getCardList({
+				getSoftList({
 					keyword: ""
 				}).then((res) => {
 					this.productList = res.data.data;
@@ -81,13 +81,14 @@
 			jumpDetailPage(item) {
 				let obj = {
 					brand_id: item.brand_id,
-					square_colour_icon: item.square_colour_icon,
+					square_colour_icon: item.circular_colour_icon,
 					brand_name: item.brand_name,
 					icon_img: item.circular_colour_icon,
 					product_type: item.product_type,
 					card_type: item.coupon_name,
 					exchange_notice: item.exchange_notice,
-					writeoff_notice: item.writeoff_notice
+					writeoff_notice: item.writeoff_notice,
+					images:item.images
 				};
 				let data = encodeURIComponent(JSON.stringify(item))
 				uni.navigateTo({
