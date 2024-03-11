@@ -50,12 +50,12 @@
 					</view>
 				</view>
 				<u-line></u-line>
-				<view class="item myCard" @tap="myCurrencyClick">
+				<!-- <view class="item myCard" @tap="myCurrencyClick">
 					<view class="img_cnt">
 						<u-icon name="rmb-circle-fill" size="34" color="#00a9f1"></u-icon>
 						<view class="title">我的奖励</view>
 					</view>
-				</view>
+				</view> -->
 				<!-- <u-line></u-line>
 				<view class="item myCard" @tap="myCardListClick">
 					<view class="img_cnt">
