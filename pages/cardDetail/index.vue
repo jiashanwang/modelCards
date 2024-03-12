@@ -85,7 +85,7 @@
 					<view class="share-btn">分享</view>
 				</button>
 			</view>
-			<view class="exchange" @tap="showFaceValList">加入购物侧</view>
+			<view class="exchange" @tap="showFaceValList">加入购物车</view>
 		</view>
 		<!-- 底部向上滑动弹窗 -->
 		<view>
@@ -123,7 +123,7 @@
 						</view>
 					</view>
 					<!-- 立即兑换 -->
-					<view class="exchange-btn" @tap="exchangeSoon">立即兑换</view>
+					<view class="exchange-btn" @tap="exchangeSoon">加入购物车</view>
 				</view>
 			</u-popup>
 		</view>
@@ -155,6 +155,7 @@
 			if (options.data) {
 				
 				let productData = JSON.parse(decodeURIComponent(options.data));
+				debugger;
 				uni.setNavigationBarTitle({
 					title: productData.brand_name
 				})
@@ -162,6 +163,7 @@
 				this.detailImg = productData.circular_colour_icon;
 				this.iconImg = productData.circular_colour_icon;
 				this.card_type = productData.card_type;
+				debugger;
 				this.swiperList = productData.images;
 				
 				// this.setData({productData:productData,detailImg:productData.square_colour_icon,iconImg:productData.icon_img,card_type:productData.card_type,has_charge:productData.has_charge,service_charge:productData.service_charge});

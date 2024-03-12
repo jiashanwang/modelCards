@@ -16,7 +16,7 @@
 			</view>
 		</view>
 		<view class="product-title"> <i>———</i>
-			<view class="title">缤纷卡劵</view> <i>———</i>
+			<view class="title">软件定制</view> <i>———</i>
 		</view>
 		<view class="product_list">
 			<block v-for="(item, index) in productList" :key="index">
