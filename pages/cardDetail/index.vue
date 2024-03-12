@@ -8,18 +8,18 @@
 				<view id="index_swiper">
 					<u-swiper :list="swiperList" @change="change" @click="click"></u-swiper>
 				</view>
-				<view class="card-title">{{productData.brand_name}}</view>
-				<!-- <view class="card-desc mt20 flexBetween">
-					<view class="used-desc">
-						<u-icon name="close-circle" color="#ff0000" size="16"></u-icon><i class="text">不支持退换</i>
-					</view>
-					<view class="used-desc">
+				<view class="card-title">{{productData.send_name}}</view>
+				<view class="card-desc mt20 flexBetween">
+				<!-- 	<view class="used-desc">
+						<u-icon name="close-circle" color="#ff0000" size="16"></u-icon><i class="text">不支持7天无理由</i>
+					</view> -->
+				<!-- 	<view class="used-desc">
 						<u-icon name="checkmark-circle" color="#a0cfff" size="16"></u-icon><i class="text">可多次使用</i>
-					</view>
-					<view class="used-desc">
-						<u-icon name="checkmark-circle" color="#a0cfff" size="16"></u-icon><i class="text">支持到店核销</i>
-					</view>
-				</view> -->
+					</view> -->
+				<!-- 	<view class="used-desc">
+						<u-icon name="checkmark-circle" color="#a0cfff" size="16"></u-icon><i class="text">支持</i>
+					</view> -->
+				</view>
 			</view>
 			<view class="line-operate"></view>
 			<view class="face-value-select flexBetween" @tap="showFaceValList">
@@ -29,11 +29,19 @@
 					<view class="select-face">共 {{specData.length}} 种版本可选</view>
 				</view>
 				<i class="iconfont icon-jinrujiantou"></i>
+				
+			</view>
+			<view class="line-operate"></view>
+			<view class="face-value-select flexBetween">
+				<view class="selet-desc">
+					<view class="select-title1 baozhang">保障:</view>
+					<view class="select-title2 baozhang">不支持7天无理由</view>
+				</view>
+				<i class="iconfont icon-jinrujiantou"></i>
 			</view>
 			<view class="line-operate1"></view>
 			<!-- 兑换流程和须知 -->
 			<view class="redemption-process">
-				
 				<view class="line-operate1"></view>
 				<view class="need-notice">
 					<view class="title1">服务优势</view>
@@ -46,7 +54,16 @@
 						</block>
 					</view>
 				</view>
-				<view class="line-operate2"></view>
+			</view>
+			<view class="">
+				<block v-for="(item,index) in productData.detail_imgs" :key="index">
+					<view class="detailimgwrap">
+						<image style="width:100%;position: relative;top:8rpx;" mode='widthFix' :src="item"></image>
+					</view>
+				</block>
+			</view>
+			<view class="redemption-process servicecnt">
+				<view class="line-operate1"></view>
 				<view class="need-notice">
 					<view class="title1">服务内容</view>
 					<view class="title1-list">
@@ -68,7 +85,7 @@
 					<view class="share-btn">分享</view>
 				</button>
 			</view>
-			<view class="exchange" @tap="showFaceValList">立即兑换</view>
+			<view class="exchange" @tap="showFaceValList">加入购物侧</view>
 		</view>
 		<!-- 底部向上滑动弹窗 -->
 		<view>
@@ -141,10 +158,7 @@
 				uni.setNavigationBarTitle({
 					title: productData.brand_name
 				})
-				debugger;
 				this.productData = productData;
-				console.log("productData==")
-				console.log(productData)
 				this.detailImg = productData.circular_colour_icon;
 				this.iconImg = productData.circular_colour_icon;
 				this.card_type = productData.card_type;
@@ -218,7 +232,6 @@
 					zhekou:this.zhekou,
 					
 				};
-				debugger;
 				let data = encodeURIComponent(JSON.stringify(obj))
 				wx.navigateTo({
 					url: "/pages/cardBuyDetail/index?data=" + data
@@ -257,7 +270,7 @@
 	}
 
 	.redemption-process {
-		margin-bottom: 160rpx;
+		// margin-bottom: 160rpx;
 	}
 
 	.u-reset-button {
@@ -265,6 +278,10 @@
 		flex-direction: column;
 		justify-content: center !important;
 		align-items: center !important;
+	}
+	.detailimgwrap .uni-image{
+		position: relative!important;
+		top:8rpx!important;
 	}
 </style>
 <style lang="scss">
@@ -305,11 +322,11 @@
 		align-items: center;
 	}
 
-	.card-detail-warp {
-		display: block;
-		height: calc(100vh - 120rpx);
-		overflow-y: scroll;
-	}
+	// .card-detail-warp {
+	// 	display: block;
+	// 	height: calc(100vh - 120rpx);
+	// 	overflow-y: scroll;
+	// }
 
 	.header,
 	.face-value-select,
@@ -348,9 +365,9 @@
 	.line-operate2 {
 		background-color: #f5f5f5;
 		height: 16rpx;
-		margin-top: 30rpx;
+		// margin-top: 30rpx;
 	}
-
+	
 	// .line-operate{
 	// 	margin-top:0rpx;
 	// }
@@ -713,5 +730,15 @@
 	.youshi{
 		position: relative;
 		top:8rpx;
+	}
+	.detailimgwrap img{
+		position: relative;
+		top:8rpx;
+	}
+	.servicecnt{
+		margin-bottom:220rpx;
+	}
+	.baozhang{
+		font-size:26rpx;
 	}
 </style>
