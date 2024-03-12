@@ -153,25 +153,25 @@
 					})
 				} else {
 					// 临时关闭 begin
-					// uni.showModal({
-					// 	title: "提示",
-					// 	content: "系统维护，临时关闭!",
-					// 	success: function(res) {
-					// 		if (res.confirm) {
+					uni.showModal({
+						title: "提示",
+						content: "系统维护，临时关闭!",
+						success: function(res) {
+							if (res.confirm) {
 							
-					// 		} else {}
-					// 	}
-					// })
+							} else {}
+						}
+					})
 					// 临时关闭 end
-					let outtradeno = window.sessionStorage.getItem("outOrderNo");
-					let orderType = 2;
-					if (!outtradeno) {
-						outtradeno = randomNumber();
-						orderType = 1;
-					};
-					// let outtradeno = randomNumber();
-					let amount = this.totalPrice;
-					this.preparePay(outtradeno, amount, orderType, openid);
+					// let outtradeno = window.sessionStorage.getItem("outOrderNo");
+					// let orderType = 2;
+					// if (!outtradeno) {
+					// 	outtradeno = randomNumber();
+					// 	orderType = 1;
+					// };
+					// // let outtradeno = randomNumber();
+					// let amount = this.totalPrice;
+					// this.preparePay(outtradeno, amount, orderType, openid);
 				}
 			},
 			// 对订单详情页的数据进行处理
