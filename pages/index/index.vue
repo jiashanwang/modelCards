@@ -28,7 +28,7 @@
 						<view class="product_price">
 							<view class="integral_price">
 								<view class="tag">¥</view>
-								<view class="price">{{item.amount}} </view>
+								<view class="price">{{item.amount}} 起 </view>
 							</view>
 							<!-- <view class="card_type">电子卡</view> -->
 						</view>

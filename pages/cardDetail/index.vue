@@ -155,7 +155,6 @@
 			if (options.data) {
 				
 				let productData = JSON.parse(decodeURIComponent(options.data));
-				debugger;
 				uni.setNavigationBarTitle({
 					title: productData.brand_name
 				})
@@ -163,9 +162,7 @@
 				this.detailImg = productData.circular_colour_icon;
 				this.iconImg = productData.circular_colour_icon;
 				this.card_type = productData.card_type;
-				debugger;
 				this.swiperList = productData.images;
-				
 				// this.setData({productData:productData,detailImg:productData.square_colour_icon,iconImg:productData.icon_img,card_type:productData.card_type,has_charge:productData.has_charge,service_charge:productData.service_charge});
 				this.getBrandEcardList(productData.brand_name);
 			}
@@ -449,7 +446,7 @@
 		display: flex;
 		justify-content: flex-start;
 		align-items: flex-start;
-		margin: 40rpx 0;
+		margin: 20rpx 0;
 	}
 
 	.title2-item {
@@ -730,8 +727,8 @@
 		margin-top: 20rpx;
 	}
 	.youshi{
-		position: relative;
-		top:8rpx;
+		// position: relative;
+		// top:8rpx;
 	}
 	.detailimgwrap img{
 		position: relative;
