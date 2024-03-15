@@ -101,7 +101,7 @@
 							<view class="integral">{{modalData.specData[currIndex].version}}<i
 									class="integral-price">{{modalData.specData[currIndex].amount}}</i></view>
 
-							<!-- <view class="remained-total">库存：充足</view> -->
+							<view class="remained-total">支持定制开发</view>
 						</view>
 					</view>
 					<view class="line-operate line-operate1"></view>
@@ -186,6 +186,7 @@
 					iconImg: this.iconImg,
 					card_type: this.card_type,
 				};
+				
 				this.modalData = modalData;
 				this.show = true;
 			},
@@ -211,8 +212,9 @@
 					this.zhekou = result.data.data.zhekou;
 					res.forEach(element => {
 						element.integral_price = element.amount;
-						element.amount = parseFloat(element.amount);
+						element.amount =element.amount;
 					});
+					
 					this.specData = res;
 				}).catch((err) => {})
 			},
@@ -336,10 +338,8 @@
 	}
 
 	.header .card-title {
-		font-size: 36rpx;
-		
-		padding:30rpx 0;
-		// margin-top: 30rpx;
+		font-size: 30rpx;
+		padding-top:30rpx;
 	}
 
 	.card-desc {
@@ -619,7 +619,10 @@
 	}
 
 	.remained-total {
-		color: #999999;
+		color: green;
+		margin-right:40rpx;
+		font-size:24rpx;
+		
 	}
 
 	.line-operate {

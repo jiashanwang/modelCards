@@ -11,8 +11,11 @@
 		<view class="home-page-container">
 			<!-- 最新公告 -->
 			<view class="notice-wrap">
-				<view class="title">最新公告：</view>
-				<view class="notice">每个商品详情页都有使用方法和兑换说明，请仔细阅读后下单!</view>
+		<!-- 		<view class="title">最新公告：</view>
+				<view class="notice">每个商品详情页都有使用方法和兑换说明，请仔细阅读后下单!</view> -->
+				<view>
+				    <u-notice-bar :text="text1" mode="link" ></u-notice-bar>
+				  </view>
 			</view>
 		</view>
 		<view class="product-title"> <i>———</i>
@@ -46,13 +49,14 @@
 	export default {
 		data() {
 			return {
-				notice:"积分按照1:1兑换 1元 = 1积分",
+				notice:"",
 				keyword: "搜索大牌卡劵",
 				swiperList: [
 					"../../static/dapaikajuan_banner.jpeg",
 					"../../static/shitinghyzhutu.jpeg"
 				],
 				productList: [],
+				text1:"如果需要定制开发，版本类型请选择定制，跟产品经理确认好需求改价后再下单！如果需要定制开发，版本类型请选择定制，跟产品经理确认好需求改价后再下单！"
 			}
 		},
 		onLoad() {

@@ -1,68 +1,117 @@
 <template>
-	<view>
+	<view class="content">
 		<view class="userInfo" @tap="bindGetUserInfo">
 			<view class="user_img">
 				<u-avatar :src="avatarUrl"></u-avatar>
 			</view>
 			<view class="loginTip noactive" @tap="login">{{ nickName }}</view>
 		</view>
+		<view class="u-flex vip-card u-p-l-40 u-p-r-30 u-p-b-30">
+			<view class="u-m-r-10 u-flex-1 u-p-t-30">
+				<text>商城尊享会员</text>
+			</view>
+			<view class="u-flex-1 u-p-t-30" style="text-align: right;">
+				<text class="u-font-30 u-m-l-20 " v-if="nickName=='立即登录'">普通会员</text>
+				<text class="u-font-30 u-m-l-20 " v-else>钻石会员</text>
+			</view>
+		</view>
 		<view class="mid"> </view>
 		<view class="user_content">
-			<!--我的订单-->
-			<view class="orders_wrap">
-				<view class="orders_title">我的订单</view>
+			<view class="orders_wrap myCenter">
+				<view class="card-hader">
+					<u-icon name="red-packet" size="26"></u-icon>
+					<text class="u-m-l-20 titleItem">我的账户</text>
+				</view>
 				<u-line></u-line>
 				<!-- 订单类型分类 -->
 				<view class="orders_content">
 					<view class="important-list">
-						<block v-for="(item,index) in busTypeList" :key="index">
-							<view class="orderIcon" @tap="buyTypeClick(index)">
-								<u--image :showLoading="true" :src="item.imgUrl" width="35px" height="40px"></u--image>
-								<view class="order_name">{{item.name}}</view>
+							<view class="orderIcon">
+								<text class="u-font-18">0</text>
+								<view class="order_name">余额</view>
 							</view>
-						</block>
-					</view>
-					<view class="more-order-types">
-						<view class="more-wrap">
-							<view class="more-order" @tap="buyTypeClick">全部订单</view>
-							<i class="iconfont icon-jinrujiantou"></i>
-						</view>
+							<view class="orderIcon">
+								<text class="u-font-18">0</text>
+								<view class="order_name">优惠券</view>
+							</view>
+							<view class="orderIcon">
+								<text class="u-font-18">0</text>
+								<view class="order_name">积分</view>
+							</view>
 					</view>
 				</view>
 			</view>
-			<!-- <u-line></u-line> -->
+			<!--我的订单-->
+			<view class="orders_wrap myCenter">
+				<!-- <view class="orders_title">我的订单</view> -->
+				<view class="card-hader">
+					<u-icon name="order" size="26"></u-icon>
+					<text class="u-m-l-20 titleItem">我的订单</text>
+				</view>
+				<u-line></u-line>
+				<!-- 订单类型分类 -->
+				<view class="orders_content">
+					<view class="important-list">
+						<u-grid :col="4" :border="false">
+							<u-grid-item @tap="itemClick(0)">
+								<u-icon name="red-packet" size="28"></u-icon>
+								<view class="grid-text u-font-10 u-m-t-10">待付款</view>
+							</u-grid-item>
+							<u-grid-item @tap="itemClick(1)">
+								<u-icon name="car" size="28"></u-icon>
+								<view class="grid-text u-font-10 u-m-t-10">待发货</view>
+							</u-grid-item>
+							<u-grid-item @tap="itemClick(2)">
+								<u-icon name="bag" size="28"></u-icon>
+								<view class="grid-text u-font-10 u-m-t-10">待收货</view>
+							</u-grid-item>
+							<u-grid-item @tap="itemClick(1)">
+								<u-icon name="trash" size="28"></u-icon>
+								<view class="grid-text u-font-10 u-m-t-10">退款售后</view>
+							</u-grid-item>
+						</u-grid>
+					</view>
+				</view>
+			</view>
+			<u-line></u-line>	
 			<!--应用信息相关的-->
 			<view class="myCenter">
-				<view class="orders_title">个人中心</view>
-				<!-- 我的卷包 -->
-				<view class="item myCard" @tap="myCardListClick">
-					<view class="img_cnt" >
-						<!-- <image class="img" src="/static/wodekabao.png"></image> -->
-						<u-icon name="order" size="36" color="#00a9f1"></u-icon>
-						<view class="title">我的卡劵</view>
+				<view class="card-hader">
+					<u-icon name="grid" size="26"></u-icon>
+					<text class="u-m-l-20 titleItem">我的服务</text>
+				</view>
+				<u-line></u-line>
+				<view class="orders_content">
+					<view class="important-list">
+						<u-grid :col="4" :border="false">
+							<u-grid-item>
+								<u-icon name="star" size="28"></u-icon>
+								<view class="grid-text u-font-10 u-m-t-10">我的收藏</view>
+							</u-grid-item>
+							<u-grid-item>
+								<u-icon name="map" size="28"></u-icon>
+								<view class="grid-text u-font-10 u-m-t-10">地址管理</view>
+							</u-grid-item>
+							<u-grid-item>
+								<u-icon name="share" size="28"></u-icon>
+								<view class="grid-text u-font-10 u-m-t-10">分销中心</view>
+							</u-grid-item>
+							<u-grid-item>
+								<u-icon name="share-square" size="28"></u-icon>
+								<view class="grid-text u-font-10 u-m-t-10">分享</view>
+							</u-grid-item>
+							<u-grid-item @tap="telClick">
+								<u-icon name="kefu-ermai" size="28"></u-icon>
+								<view class="grid-text u-font-10 u-m-t-10">联系我们</view>
+							</u-grid-item>
+							<u-grid-item @tap="mySetClick">
+								<u-icon name="setting" size="28"></u-icon>
+								<view class="grid-text u-font-10 u-m-t-10">设置</view>
+							</u-grid-item>
+						</u-grid>
 					</view>
 				</view>
 				<u-line></u-line>
-				<view class="item myCard" @tap="telClick">
-					<view class="img_cnt">
-						<u-icon name="phone" size="36" color="#00a9f1"></u-icon>
-						<view class="title">售后电话</view>
-					</view>
-				</view>
-				<u-line></u-line>
-				<!-- <view class="item myCard" @tap="myCurrencyClick">
-					<view class="img_cnt">
-						<u-icon name="rmb-circle-fill" size="34" color="#00a9f1"></u-icon>
-						<view class="title">我的奖励</view>
-					</view>
-				</view> -->
-				<!-- <u-line></u-line>
-				<view class="item myCard" @tap="myCardListClick">
-					<view class="img_cnt">
-						<u-icon name="question" size="34" color="#ff9900"></u-icon>
-						<view class="title">常见问题</view>
-					</view>
-				</view> -->
 			</view>
 		</view>
 	</view>
@@ -103,35 +152,53 @@
 				],
 				contactFlag: false,
 				animationData: {},
+				pic: 'https://uviewui.com/common/logo.png',
 			}
 		},
 		onLoad(options) {
 			let openid = uni.getStorageSync("openid");
-			this.nickName = openid?openid:"立即登录";
+			this.nickName = openid ? openid : "立即登录";
 		},
 		methods: {
+			mySetClick(){
+				// 清除本地缓存
+				uni.clearStorage({
+				    success(res) {
+						uni.showToast({
+							title: '清除缓存成功',
+							//将值设置为 success 或者直接不用写icon这个参数
+							icon: 'success',
+							//显示持续时间为 2秒
+							duration: 2000
+						})  
+
+				    },
+				    fail(err) {
+				    }
+				});
+			},
 			// 我的奖励
-			myCurrencyClick(){
+			myCurrencyClick() {
 				uni.navigateTo({
 					url: '/pages/myCurrency/index',
 				})
 			},
-			telClick(){
+			telClick() {
 				uni.showModal({
 					title: "提示",
-					content: "请拨打人工客服电员：19814793205",
+					content: "客服电员：13270117781（微信同号）",
 					success: function(res) {
 						if (res.confirm) {
-				
+
 						} else {
-				
+
 						}
-				
+
 					}
-				
+
 				})
 			},
-			login(){
+			login() {
 				uni.navigateTo({
 					url: "/pages/login/index",
 				});
@@ -142,7 +209,7 @@
 					url: '/pages/myCard/index',
 				})
 			},
-			buyTypeClick(index) {
+			itemClick(index) {
 				uni.switchTab({
 					url: '/pages/orderList/index'
 				})
@@ -150,6 +217,11 @@
 		}
 	}
 </script>
+<style>
+	.iconimg .u-icon__icon {
+		color: #f6e5a3 !important;
+	}
+</style>
 
 <style lang="scss">
 	.order_name {
@@ -164,10 +236,11 @@
 	}
 
 	.userInfo {
-		height: 220rpx;
+		height: 260rpx;
 		padding-top: 30rpx;
 		position: relative;
-		background-image: url("http://aaa.itgy.com.cn/images/changhebgimg.jpeg");
+		// background-image: url("http://aaa.itgy.com.cn/images/changhebgimg.jpeg");
+		background-image: linear-gradient(90deg, rgb(42, 132, 255), rgb(234, 175, 200));
 		background-size: 100% 100%;
 		/*按比例缩放*/
 		background-repeat: no-repeat;
@@ -192,6 +265,7 @@
 		justify-content: center;
 		align-items: center;
 		position: relative;
+		// top:-10rpx;
 	}
 
 	.noactive {
@@ -227,6 +301,9 @@
 
 	.user_content {
 		padding-bottom: 100rpx;
+		margin: 30rpx;
+		position: relative;
+		top:-60rpx;
 	}
 
 	.orders_wrap {
@@ -240,7 +317,8 @@
 
 	.orders_content {
 		display: flex;
-		padding-top: 20px;
+		padding-top: 36rpx;
+		padding-bottom:36rpx;
 	}
 
 	.important-list {
@@ -561,5 +639,112 @@
 		margin: 0 auto;
 		color: #b5b5b5;
 		margin-bottom: 60rpx;
+	}
+
+	.content {
+		background-color: #F8F8F8;
+	}
+
+	.logoIcon {
+		width: 148rpx;
+		height: 148rpx;
+		background-color: transparent;
+		border-radius: 500rpx;
+		;
+		position: relative;
+		left: 80rpx;
+		top: 20rpx;
+	}
+
+	.vip-card {
+		background-image: url(../../static/vip-card.png);
+		background-size: cover;
+		color: #f6e5a3;
+		width: 86vw;
+		position: relative;
+		top: -48upx;
+		margin: 0 auto;
+		
+	}
+
+	.u-flex {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+	}
+
+	.u-flex-1 {
+		flex: 1;
+	}
+
+	.u-p-l-40 {
+		padding-left: 40rpx !important;
+	}
+
+	.u-p-r-30 {
+		padding-right: 30rpx !important;
+	}
+
+	.u-p-b-30 {
+		padding-bottom: 20rpx !important;
+	}
+
+	.u-m-r-10 {
+		margin-right: 10rpx !important;
+	}
+
+	.u-p-t-30 {
+		padding-top: 20rpx !important;
+	}
+
+	.u-m-r-20 {
+		margin-right: 20rpx !important;
+	}
+
+	.u-font-30 {
+		font-size: 20rpx !important;
+	}
+
+	.u-m-l-20 {
+		margin-left: 20rpx !important;
+	}
+
+	.card-hader {
+		display: flex;
+		justify-content:flex-start;
+		// text-align: left;
+		// width: 92vw;
+		// margin: 0 500upx;
+		padding: 15upx 20upx;
+		background-color: #FFFFFF;
+		// border: 1upx solid #FDF6EC;
+	}
+
+	.card-body {
+		width: 92vw;
+		margin: 0 500upx;
+		padding: 15upx 20upx;
+		background-color: #FFFFFF;
+		border: 1upx solid #FDF6EC;
+		border-top: none;
+	}
+	.u-font-18{
+		font-size:34rpx;
+	}
+	.titleItem{
+		position: relative;
+		top:4rpx;
+		left:-10rpx;
+	}
+	.u-grid{
+		width: 100%;
+		    display: flex;
+		    flex-direction: row;
+		    flex-wrap: wrap;
+		    align-items: center;
+			justify-content: space-around;
+	}
+	.grid-text{
+		margin-bottom:30rpx;
 	}
 </style>

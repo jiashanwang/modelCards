@@ -25,48 +25,51 @@
 			}
 		},
 		{
-			"path" : "pages/my/my",
-			"style" : 
-			{
+			"path": "pages/my/my",
+			"style": {
 				"navigationBarTitleText": "个人中心",
 				"enablePullDownRefresh": false,
 				"navigationBarBackgroundColor": "#ffffff"
 			}
 		},
 		{
-			"path" : "pages/myCard/index",
-			"style" : 
-			{
-				"navigationBarTitleText" : "我的卡劵",
-				"enablePullDownRefresh" : false,
+			"path": "pages/myCard/index",
+			"style": {
+				"navigationBarTitleText": "我的卡劵",
+				"enablePullDownRefresh": false,
 				"navigationBarBackgroundColor": "#ffffff"
 			}
 		},
 		{
-			"path" : "pages/orderList/index",
-			"style" : 
-			{
-				"navigationBarTitleText" : "订单列表",
-				"enablePullDownRefresh" : false,
+			"path": "pages/orderList/index",
+			"style": {
+				"navigationBarTitleText": "订单列表",
+				"enablePullDownRefresh": false,
 				"navigationBarBackgroundColor": "#ffffff"
 			}
 		},
 		{
-			"path" : "pages/login/index",
-			"style" : 
-			{
-				"navigationBarTitleText" : "登录账号",
-				"enablePullDownRefresh" : false,
+			"path": "pages/login/index",
+			"style": {
+				"navigationBarTitleText": "登录账号",
+				"enablePullDownRefresh": false,
 				"navigationBarBackgroundColor": "#ffffff"
 			}
 		},
 		{
-			"path" : "pages/myCurrency/index",
-			"style" : 
-			{
-				"navigationBarTitleText" : "我的奖励",
-				"enablePullDownRefresh" : false,
+			"path": "pages/myCurrency/index",
+			"style": {
+				"navigationBarTitleText": "我的奖励",
+				"enablePullDownRefresh": false,
 				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+		{
+			"path": "pages/center/index",
+			"style": {
+				"navigationBarTitleText": "用户",
+				"navigationStyle": "custom", // 隐藏系统导航栏
+				"navigationBarTextStyle": "#ff0000"
 			}
 		}
 	],
@@ -81,8 +84,7 @@
 		"selectedColor": "#FF5F15",
 		"backgroundColor": "#ffffff",
 		"borderStyle": "black",
-		"list": [
-			{
+		"list": [{
 				"pagePath": "pages/index/index",
 				"iconPath": "static/shouye.png",
 				"selectedIconPath": "static/shouye1.png",
@@ -100,6 +102,12 @@
 				"selectedIconPath": "static/my1.png",
 				"text": "个人中心"
 			}
+			// {
+			// 	"pagePath": "pages/center/index",
+			// 	"iconPath": "static/my.png",
+			// 	"selectedIconPath": "static/my1.png",
+			// 	"text": "个人中心"
+			// }
 		]
 	},
 	"uniIdRouter": {}
