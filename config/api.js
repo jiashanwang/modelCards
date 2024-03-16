@@ -22,5 +22,8 @@ export const getMyCurrencyByUser = (params, config = {}) => http.post('/miniprog
 export const createJingXiuOrder = (params, config = {}) => http.post('/order/createJingXiuOrder', params, config) //创建三方支付订单精秀科技
 
 
+
+
+
 // get请求列表，，注意：get请求的配置等，都在第二个参数中，详见前面解释
 export const getMenu = (data) => http.get('/ebapi/public_api/index', data) //获取菜单 举例

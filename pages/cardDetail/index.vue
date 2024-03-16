@@ -231,8 +231,10 @@
 					iconImg: this.detailImg,
 					card_type: this.modalData.card_type,
 					zhekou:this.zhekou,
+					sendName:this.productData.send_name
 					
 				};
+				debugger;
 				let data = encodeURIComponent(JSON.stringify(obj))
 				wx.navigateTo({
 					url: "/pages/cardBuyDetail/index?data=" + data
