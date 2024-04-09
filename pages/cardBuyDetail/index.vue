@@ -16,7 +16,7 @@
 			<view class="notice-desc">不支持退换货</view>
 		</view>
 		<view class="line-operate"></view>
-		<view class="use-desc">支付成功后，可前往 "个人中心 - 我的订单 - 查看使用"</view>
+		<view class="use-desc">支付成功后，可前往 "个人中心 - 私人定制 - 查看使用"</view>
 		<view class="goodsDesc">本商品为软件定制开发产品（非标品），下单前请联系产品经理进行需求确认后再支付。</view>
 		<view class="buy-wrap">
 			<view class="buy-title">购买数量</view>
@@ -124,6 +124,7 @@
 				message: "支付金额不能为空！",
 				token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJkYXRhIjp7ImFwcF9pZCI6InRkaGY2dTMxeG15NDVvdyIsImFwcF9zZWNyZXQiOiJiYzc3Yjc0OTMwZDg4NmI0ZDQ4MTcwM2EwYWY4M2FkMCJ9fQ.MLs3jEyrcNYrx8SJkPQbsGyDa1JFL3U0hzyHdUgj46c",
 				url: "",
+				
 			};
 		},
 		onLoad(options) {
@@ -187,14 +188,12 @@
 			},
 			// 对订单详情页的数据进行处理
 			handleOrderData(orderData) {
-				debugger;
 				if (orderData.currSeletedItem.amount == '定制版') {
 					this.isCustom = true;
 				} else {
 					let totalPrice = orderData.buyNum * orderData.currSeletedItem.amount;
 					this.totalPrice = totalPrice;
 				}
-				debugger;
 				let chargePrice = 0;
 				this.orderData = orderData;
 				this.buyNum = orderData.buyNum;
@@ -220,7 +219,6 @@
 			},
 			preparePay(outtradeno, amount, orderType, openid) {
 				let productName = this.orderData.sendName;
-				debugger;
 				if (!amount) {
 					this.$refs.uNotify.show({
 						top: 300,
@@ -234,7 +232,7 @@
 					})
 					return;
 				};
-				this.getWxPlateOrder(outtradeno, amount); // 调用官方微信支付
+				this.getWxPlateOrder(outtradeno, amount,openid,productName); // 调用官方微信支付
 				// let handleAmount = amount;
 				// let params = {
 				// 	outtradeno,
@@ -259,29 +257,33 @@
 				// 	}
 				// }).catch((err) => {})
 			},
-			getWxPlateOrder(outtradeno, amount) {
+			getWxPlateOrder(outtradeno, amount,openid,productName) {
 				// 调用官方微信支付 后台配置收款商户号
 				uni.showLoading({
 					title: '正在连接，请稍候...',
 					mask: true
 				});
-				let params = {
-					outOrderNo: outtradeno,
-					amount: amount,
-					notifyUrl: "", // 测试回调通知
-					payMethod: this.radiovalue1,
-					userName: ""
-				}
+				// let params = {
+				// 	outOrderNo: outtradeno,
+				// 	amount: amount,
+				// 	notifyUrl: "", // 测试回调通知
+				// 	payMethod: this.radiovalue1,
+				// 	userName: "",
+				// 	openid:openid
+				// }
 				let token = this.token;
 				uni.request({
-					url: 'http://1.14.43.168/paymentcmj/main/createOrder',
+					url: 'https://www.hbkangjin.cn/paymentcmj/main/createOrder',
 					// url: 'http://192.168.10.106:4002/paymentcmj/main/createOrder',
 					data: {
 						outOrderNo: outtradeno,
 						amount: amount,
 						notifyUrl: "", // 测试回调通知
 						payMethod: this.radiovalue1,
-						userName: ""
+						userName: "",
+						openid:openid,
+						productName: productName,
+						detailImg:this.orderData.normalImg
 					},
 					method: "POST",
 					header: {
@@ -295,7 +297,6 @@
 							// 支付平台为官方
 							if (result.data.paymentType == 3) {
 								// 微信小程序支付
-								debugger;
 								let url = result.data.url_link;
 								this.url = url;
 								// this.getQrcodeImg(url);

@@ -99,7 +99,8 @@
 						</view> -->
 						<view class="product-desc">
 							<view class="integral">{{modalData.specData[currIndex].version}}<i
-									class="integral-price">{{modalData.specData[currIndex].amount}}</i></view>
+									class="integral-price" v-if="isCustom">协商定价</i><i
+									class="integral-price" v-if="!isCustom">{{modalData.specData[currIndex].amount}}</i></view>
 
 							<view class="remained-total">支持定制开发</view>
 						</view>
@@ -111,7 +112,7 @@
 						<view class="face-value-list">
 							<block v-for="(item,index) in modalData.specData" :key="index">
 								<view class="face-item" :class="[currIndex==index?'actived':'']"
-									@tap='currFaceItemClick(index)'>{{item.amount}} 元</view>
+									@tap='currFaceItemClick(index)'>{{item.amount}} {{item.amount=="定制版"?"":"元"}}</view>
 							</block>
 						</view>
 					</view>
@@ -119,7 +120,8 @@
 					<view class="buy-wrap">
 						<view class="buy-title">购买数量</view>
 						<view class="buy-operate">
-							<u-number-box v-model="buyNum" @change="valChange" integer></u-number-box>
+							<u-number-box v-model="buyNum" v-if="isCustom" disabled="" @change="valChange" integer></u-number-box>
+							<u-number-box v-model="buyNum" v-else @change="valChange" integer></u-number-box>
 						</view>
 					</view>
 					<!-- 立即兑换 -->
@@ -149,6 +151,7 @@
 				detailImg: "",
 				iconImg: "",
 				card_type: "",
+				isCustom:false,
 			};
 		},
 		onLoad(options) {
@@ -175,6 +178,12 @@
 			currFaceItemClick(index) {
 				let modalData = this.modalData;
 				this.currIndex = index;
+				if (this.modalData.specData[index].amount == "定制版"){
+					this.isCustom = true;
+					this.buyNum = 1;
+				}else{
+					this.isCustom = false;
+				}
 			},
 			showFaceValList() {
 				let modalData = {
@@ -234,7 +243,6 @@
 					sendName:this.productData.send_name
 					
 				};
-				debugger;
 				let data = encodeURIComponent(JSON.stringify(obj))
 				wx.navigateTo({
 					url: "/pages/cardBuyDetail/index?data=" + data

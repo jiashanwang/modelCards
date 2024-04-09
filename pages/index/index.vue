@@ -2,7 +2,7 @@
 	<view class="home-page-header">
 		<!-- 搜索 -->
 		<view class="">
-			<u-search placeholder="搜索大牌卡劵" v-model="keyword" :showAction="false"></u-search>
+			<u-search placeholder="搜索软件类型" v-model="keyword" :showAction="false"></u-search>
 		</view>
 		<!-- 轮播图 -->
 		<view id="index_swiper">
@@ -19,7 +19,7 @@
 			</view>
 		</view>
 		<view class="product-title"> <i>———</i>
-			<view class="title">软件定制</view> <i>———</i>
+			<view class="title">软件私人定制开发</view> <i>———</i>
 		</view>
 		<view class="product_list">
 			<block v-for="(item, index) in productList" :key="index">
@@ -50,10 +50,11 @@
 		data() {
 			return {
 				notice:"",
-				keyword: "搜索大牌卡劵",
+				keyword: "搜索软件类型",
 				swiperList: [
-					"../../static/dapaikajuan_banner.jpeg",
-					"../../static/shitinghyzhutu.jpeg"
+					// "../../static/dapaikajuan_banner.jpeg",
+					// "../../static/shitinghyzhutu.jpeg"
+					"../../static/softimg.png"
 				],
 				productList: [],
 				text1:"如果需要定制开发，版本类型请选择定制，跟产品经理确认好需求改价后再下单！如果需要定制开发，版本类型请选择定制，跟产品经理确认好需求改价后再下单！"

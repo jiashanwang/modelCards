@@ -44,26 +44,26 @@
 					<view class="box-cnt">
 						<!-- <image class="img" mode="widthFix" :src="currItem.detail_img"></image> -->
 						<view class="header-title">恭喜您</view>
-						<view class="title">获得{{currItem.product_name}}</view>
+						<view class="title">{{currItem.product_name}}</view>
 					</view>
 					<view class="ecard-wrap">
 						<view class="card-content">
 							<view class="card-no-wrap">
 								<!-- <view class="card-no-title common1">您的服务账号为</view> -->
-								<view class="card-no-title common1">您的卡号为</view>
+								<view class="card-no-title common1">交付说明</view>
 								<view class="card-no-desc common2">{{currItem.card_no}}</view>
 							</view>
 							<view class="card-no-wrap">
 								<!-- <view class="card-pwd-title common1">您的服务密码为</view> -->
-								<view class="card-pwd-title common1">您的密码为</view>
+								<view class="card-pwd-title common1">一对一客户经理</view>
 								<view class="card-pwd-desc common2">{{currItem.card_pwd}}</view>
 							</view>
-							<view class="card-operate">
+						<!-- 	<view class="card-operate">
 								<view class="copy-no" @tap="copyCardInfo(1)">复制账号
 								</view>
 								<view class="copy-no" @tap="copyCardInfo(2)">复制密码
 								</view>
-							</view>
+							</view> -->
 						</view>
 					</view>
 				</view>
@@ -323,6 +323,8 @@
 		color: #969596;
 		font-size: 32rpx;
 		margin-top: 10rpx;
+		padding:20rpx 40rpx;
+		text-align:center;
 	}
 
 	.card-operate {

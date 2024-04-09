@@ -3,7 +3,7 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "兑换中心",
+				"navigationBarTitleText": "软件大厅",
 				"navigationBarBackgroundColor": "#ffffff"
 				// "navigationStyle": "custom",
 				// "enablePullDownRefresh" : false
@@ -35,7 +35,7 @@
 		{
 			"path": "pages/myCard/index",
 			"style": {
-				"navigationBarTitleText": "我的卡劵",
+				"navigationBarTitleText": "我的定制软件",
 				"enablePullDownRefresh": false,
 				"navigationBarBackgroundColor": "#ffffff"
 			}
@@ -71,11 +71,19 @@
 				"navigationStyle": "custom", // 隐藏系统导航栏
 				"navigationBarTextStyle": "#ff0000"
 			}
+		},
+		{
+			"path" : "pages/privacy/index",
+			"style" : 
+			{
+				"navigationBarTitleText" : "用户隐私协议",
+				"enablePullDownRefresh" : false
+			}
 		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "顺卡乐选",
+		"navigationBarTitleText": "慧轩软件定制开发",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	},
@@ -88,19 +96,19 @@
 				"pagePath": "pages/index/index",
 				"iconPath": "static/shouye.png",
 				"selectedIconPath": "static/shouye1.png",
-				"text": "首页"
+				"text": "软件大厅"
 			},
 			{
 				"pagePath": "pages/orderList/index",
 				"iconPath": "static/orderCenter.png",
 				"selectedIconPath": "static/orderCenter1.png",
-				"text": "订单中心"
+				"text": "购物车"
 			},
 			{
 				"pagePath": "pages/my/my",
 				"iconPath": "static/my.png",
 				"selectedIconPath": "static/my1.png",
-				"text": "个人中心"
+				"text": "我的"
 			}
 			// {
 			// 	"pagePath": "pages/center/index",

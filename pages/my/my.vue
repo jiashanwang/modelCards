@@ -26,10 +26,10 @@
 				<!-- 订单类型分类 -->
 				<view class="orders_content">
 					<view class="important-list">
-							<view class="orderIcon">
+							<!-- <view class="orderIcon">
 								<text class="u-font-18">0</text>
 								<view class="order_name">余额</view>
-							</view>
+							</view> -->
 							<view class="orderIcon">
 								<text class="u-font-18">0</text>
 								<view class="order_name">优惠券</view>
@@ -104,6 +104,10 @@
 								<u-icon name="kefu-ermai" size="28"></u-icon>
 								<view class="grid-text u-font-10 u-m-t-10">联系我们</view>
 							</u-grid-item>
+							<u-grid-item @tap="myCardListClick">
+								<u-icon name="shopping-cart" size="28"></u-icon>
+								<view class="grid-text u-font-10 u-m-t-10">私人定制</view>
+							</u-grid-item>
 							<u-grid-item @tap="mySetClick">
 								<u-icon name="setting" size="28"></u-icon>
 								<view class="grid-text u-font-10 u-m-t-10">设置</view>
@@ -112,6 +116,10 @@
 					</view>
 				</view>
 				<u-line></u-line>
+			</view>
+			<view class="icpWrap">
+				<view class="icp">鄂ICP备2024038394号-1</view>
+				<view>商城客服：13871757456</view>
 			</view>
 		</view>
 	</view>
@@ -300,7 +308,7 @@
 	}
 
 	.user_content {
-		padding-bottom: 100rpx;
+		// padding-bottom: 100rpx;
 		margin: 30rpx;
 		position: relative;
 		top:-60rpx;
@@ -747,4 +755,17 @@
 	.grid-text{
 		margin-bottom:30rpx;
 	}
+	.icpWrap{
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		margin-top:30rpx;
+		align-items: center;
+		font-size:24rpx;
+		color:#999999;
+	}
+	.icp{
+		margin-bottom:20rpx;
+	}
+	
 </style>
