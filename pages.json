@@ -1,9 +1,16 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		// {
+		// 	"path": "pages/firstIndex/index",
+		// 	"style": {
+		// 		"navigationBarTitleText": "",
+		// 		"enablePullDownRefresh": false
+		// 	}
+		// },
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "软件大厅",
+				"navigationBarTitleText": "首页",
 				"navigationBarBackgroundColor": "#ffffff"
 				// "navigationStyle": "custom",
 				// "enablePullDownRefresh" : false
@@ -73,17 +80,25 @@
 			}
 		},
 		{
-			"path" : "pages/privacy/index",
+			"path": "pages/privacy/index",
+			"style": {
+				"navigationBarTitleText": "用户隐私协议",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path" : "pages/category/index",
 			"style" : 
 			{
-				"navigationBarTitleText" : "用户隐私协议",
-				"enablePullDownRefresh" : false
+				"navigationBarTitleText" : "分类",
+				"navigationBarBackgroundColor": "#ffffff"
 			}
 		}
+
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "慧轩软件定制开发",
+		"navigationBarTitleText": "慧轩臻品",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	},
@@ -95,8 +110,14 @@
 		"list": [{
 				"pagePath": "pages/index/index",
 				"iconPath": "static/shouye.png",
-				"selectedIconPath": "static/shouye1.png",
-				"text": "软件大厅"
+				"selectedIconPath": "static/shouye1.png",		
+				"text": "首页"
+			},
+			{
+				"pagePath": "pages/category/index",
+				"iconPath": "static/category.png",
+				"selectedIconPath": "static/category-on.png",
+				"text": "分类"
 			},
 			{
 				"pagePath": "pages/orderList/index",

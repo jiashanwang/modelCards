@@ -2,7 +2,7 @@
 	<view class="home-page-header">
 		<!-- 搜索 -->
 		<view class="">
-			<u-search placeholder="搜索软件类型" v-model="keyword" :showAction="false"></u-search>
+			<u-search placeholder="请输入关键字" v-model="keyword" :showAction="false"></u-search>
 		</view>
 		<!-- 轮播图 -->
 		<view id="index_swiper">
@@ -18,8 +18,15 @@
 				  </view>
 			</view>
 		</view>
-		<view class="product-title"> <i>———</i>
-			<view class="title">软件私人定制开发</view> <i>———</i>
+		<!-- 栅格系统 -->
+		<u-grid col="4" class="category" :border="false">
+			<u-grid-item :key="key" v-for="(item,key) in categoryList" @tap="jumpToCat">
+				<image :src="item.img" class="category-img"></image>
+				<view class="grid-text">{{item.name}}</view>
+			</u-grid-item>
+		</u-grid>
+		<view class="product-title">
+			<view class="title">热销榜单</view> <view class="more">更多 > </view>
 		</view>
 		<view class="product_list">
 			<block v-for="(item, index) in productList" :key="index">
@@ -44,20 +51,33 @@
 
 <script>
 	import {
-		getCardList,getNotice,getSoftList
+		getCardList,getNotice,getSoftList,getShopGoodsList
 	} from '@/config/api.js';
 	export default {
 		data() {
 			return {
 				notice:"",
-				keyword: "搜索软件类型",
+				keyword: "请输入关键字",
 				swiperList: [
 					// "../../static/dapaikajuan_banner.jpeg",
 					// "../../static/shitinghyzhutu.jpeg"
 					"../../static/softimg.png"
 				],
 				productList: [],
-				text1:"如果需要定制开发，版本类型请选择定制，跟产品经理确认好需求改价后再下单！如果需要定制开发，版本类型请选择定制，跟产品经理确认好需求改价后再下单！"
+				text1:"如果需要定制开发，版本类型请选择定制，跟产品经理确认好需求改价后再下单！如果需要定制开发，版本类型请选择定制，跟产品经理确认好需求改价后再下单！",
+				// 分类菜单
+				categoryList: [
+					{ id: 1, name: '砍价活动', img: '/static/category/1.png' },
+					{ id: 2, name: '限时秒杀', img: '/static/category/2.png' },
+					{ id: 3, name: '热销榜单', img: '/static/category/3.png' },
+					{ id: 4, name: '领劵中心', img: '/static/category/4.png' },
+					{ id: 5, name: '积分签到', img: '/static/category/5.png' },
+					{ id: 6, name: '会员中心', img: '/static/category/6.png' },
+					{ id: 7, name: '我的收藏', img: '/static/category/7.png' },
+					// { id: 8, name: '商城咨询', img: '/static/category/8.png' },
+					// { id: 8, name: '帮助中心', img: '/static/category/9.png' },
+					{ id: 8, name: '积分抽奖', img: '/static/category/10.png' }
+				],
 			}
 		},
 		onLoad() {
@@ -77,7 +97,7 @@
 			 * 获取卡劵列表
 			 */
 			getCardList() {
-				getSoftList({
+				getShopGoodsList({
 					keyword: ""
 				}).then((res) => {
 					this.productList = res.data.data;
@@ -99,6 +119,11 @@
 				uni.navigateTo({
 					url: "/pages/cardDetail/index?data=" + data
 				});
+			},
+			jumpToCat(){
+				uni.switchTab({
+					url:"/pages/index/index",
+				})
 			},
 		}
 	}
@@ -266,16 +291,18 @@
 	.product-title {
 		width: calc(100%-48rpx);
 		display: flex;
-		justify-content: center;
+		justify-content: space-between;
 		align-items: center;
 		background-color: #ffffff;
 		padding: 30rpx 0 50rpx 0;
+		
 	}
 
 	.product-title .title {
 		text-align: center;
 		font-size: 34rpx;
 		margin: 0 20rpx;
+		font-weight: bold;
 	}
 
 	.product-title i {
@@ -365,5 +392,24 @@
 		font-size:20rpx;
 		position: relative;
 		top:2px;
+	}
+	.category{
+		padding: 30upx 0upx;
+		border: 1upx solid #FDF6EC;
+		border-left: none;
+		border-right: none;
+		margin-bottom: 10upx;
+		
+	}
+	.category-img{
+		width: 55upx;
+		height: 55upx;
+		margin-bottom: 5upx;
+	}
+	.grid-text{
+		margin-bottom:26rpx;
+	}
+	.more{
+		color:#cccccc;
 	}
 </style>

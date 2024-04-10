@@ -10,10 +10,17 @@
 				</view>
 				<view class="card-title">{{productData.send_name}}</view>
 				<view class="card-desc mt20 flexBetween">
-				<!-- 	<view class="used-desc">
-						<u-icon name="close-circle" color="#ff0000" size="16"></u-icon><i class="text">不支持7天无理由</i>
-					</view> -->
-				<!-- 	<view class="used-desc">
+					<view class="used-desc">
+						<view class="kucun">
+							库存:充足
+						</view>
+					</view>
+					<view class="used-desc">
+						<view class="kucun">
+							销量:{{productData.mock_sales}}件
+						</view>
+					</view>
+					<!-- <view class="used-desc">
 						<u-icon name="checkmark-circle" color="#a0cfff" size="16"></u-icon><i class="text">可多次使用</i>
 					</view> -->
 				<!-- 	<view class="used-desc">
@@ -22,7 +29,14 @@
 				</view>
 			</view>
 			<view class="line-operate"></view>
-			<view class="face-value-select flexBetween" @tap="showFaceValList">
+			<view class="face-value-select flexBetween">
+				<view class="selet-desc">
+					<view class="select-title1 baozhang">用户评价:</view>
+					<view class="select-title2 baozhang haoping">好评率 {{haoping}}%</view>
+				</view>
+				<i class="iconfont icon-jinrujiantou"></i>
+			</view>
+			<!-- <view class="face-value-select flexBetween" @tap="showFaceValList">
 				<view class="selet-desc">
 					<view class="select-title1">选择:</view>
 					<view class="select-title2">选择版本类型</view>
@@ -30,21 +44,21 @@
 				</view>
 				<i class="iconfont icon-jinrujiantou"></i>
 				
-			</view>
+			</view> -->
 			<view class="line-operate"></view>
 			<view class="face-value-select flexBetween">
 				<view class="selet-desc">
-					<view class="select-title1 baozhang">保障:</view>
-					<view class="select-title2 baozhang">不支持7天无理由</view>
+					<view class="select-title1 baozhang">售后保障:</view>
+					<view class="select-title2 baozhang">支持7天无理由</view>
 				</view>
 				<i class="iconfont icon-jinrujiantou"></i>
 			</view>
 			<view class="line-operate1"></view>
 			<!-- 兑换流程和须知 -->
-			<view class="redemption-process">
+			<view class="redemption-process" v-if="productData.exchange_notice.length">
 				<view class="line-operate1"></view>
 				<view class="need-notice">
-					<view class="title1">服务优势</view>
+					<view class="title1">商品详情</view>
 					<view class="title1-list">
 						<block v-for="(item,index) in productData.exchange_notice" :key="index">
 							<view class="title1-item">
@@ -62,7 +76,7 @@
 					</view>
 				</block>
 			</view>
-			<view class="redemption-process servicecnt">
+			<view class="redemption-process servicecnt" v-if="productData.writeoff_notice.length">
 				<view class="line-operate1"></view>
 				<view class="need-notice">
 					<view class="title1">服务内容</view>
@@ -94,26 +108,38 @@
 				<view class="popupBox">
 					<!-- 内容 -->
 					<view class="left-cnt" v-if="show">
-					<!-- 	<view class="left-img mr20">
-							<u--image :src="modalData.normalImg" mode="widthFix"></u--image>
-						</view> -->
-						<view class="product-desc">
+						<view class="left-img mr20">
+							<!-- <u--image style="width:auto;" :src="modalData.normalImg" mode="widthFix"></u--image> -->
+							<!-- <view class="goodsWrap">
+								
+								<view class="item-menu-name">￥{{modalData.amount}}</view>
+								<view class="item-menu-name">已售：{{modalData.mock_sales}}件</view>
+								<view>已选择：默认 {{buyNum}}件</view>
+							</view> -->
+						</view>
+						<!-- <view class="product-desc">
 							<view class="integral">{{modalData.specData[currIndex].version}}<i
 									class="integral-price" v-if="isCustom">协商定价</i><i
 									class="integral-price" v-if="!isCustom">{{modalData.specData[currIndex].amount}}</i></view>
 
 							<view class="remained-total">支持定制开发</view>
-						</view>
+						</view> -->
 					</view>
 					<view class="line-operate line-operate1"></view>
 					<!-- 面额 -->
-					<view class="face-list">
+				<!-- 	<view class="face-list">
 						<view class="face-title">面额</view>
 						<view class="face-value-list">
 							<block v-for="(item,index) in modalData.specData" :key="index">
 								<view class="face-item" :class="[currIndex==index?'actived':'']"
 									@tap='currFaceItemClick(index)'>{{item.amount}} {{item.amount=="定制版"?"":"元"}}</view>
 							</block>
+						</view>
+					</view> -->
+					<view class="buy-wrap guige">
+						<view class="buy-title">规则</view>
+						<view class="buy-operate">
+							默认<span class="bukexuan">(不可选)</span>
 						</view>
 					</view>
 					<!-- 购买数量 -->
@@ -152,11 +178,14 @@
 				iconImg: "",
 				card_type: "",
 				isCustom:false,
+				
+				haoping:99,
 			};
 		},
 		onLoad(options) {
 			if (options.data) {
-				
+				let randomValue = Math.random() * 4 + 95;
+				this.haoping = Math.round(randomValue);
 				let productData = JSON.parse(decodeURIComponent(options.data));
 				uni.setNavigationBarTitle({
 					title: productData.brand_name
@@ -186,14 +215,17 @@
 				}
 			},
 			showFaceValList() {
+				debugger;
 				let modalData = {
 					productFullName: this.productData.brand_name,
 					normalImg: this.detailImg ? this.detailImg : this.productData.banner,
-					specData: this.specData,
-					pid: this.productData.brand_id,
-					productType: this.productData.product_type,
+					mock_sales:this.productData.mock_sales,
+					amount:this.productData.amount,
+					// specData: this.specData,
+					// pid: this.productData.brand_id,
+					// productType: this.productData.product_type,
 					iconImg: this.iconImg,
-					card_type: this.card_type,
+					// card_type: this.card_type,
 				};
 				
 				this.modalData = modalData;
@@ -229,20 +261,23 @@
 			},
 			// 立即兑换点击事件
 			exchangeSoon() {
-				let specsData = this.modalData.specData;
+				debugger;
+				// let specsData = this.modalData.specData;
 				let obj = {
 					buyNum: this.buyNum,
 					productFullName: this.modalData.productFullName,
 					normalImg: this.detailImg,
-					currSeletedItem: specsData[this.currIndex],
-					pid: this.modalData.pid,
-					productType: this.modalData.productType,
+					// currSeletedItem: specsData[this.currIndex],
+					// pid: this.modalData.pid,
+					// productType: this.modalData.productType,
 					iconImg: this.detailImg,
-					card_type: this.modalData.card_type,
+					// card_type: this.modalData.card_type,
 					zhekou:this.zhekou,
-					sendName:this.productData.send_name
+					sendName:this.productData.send_name,
+					amount:this.modalData.amount,
 					
 				};
+				debugger;
 				let data = encodeURIComponent(JSON.stringify(obj))
 				wx.navigateTo({
 					url: "/pages/cardBuyDetail/index?data=" + data
@@ -274,7 +309,7 @@
 	}
 
 	.u-transition {
-		width: 100% !important;
+		// width: 100% !important;
 		display: flex !important;
 		justify-content: center !important;
 		align-items: center !important;
@@ -293,6 +328,9 @@
 	.detailimgwrap .uni-image{
 		position: relative!important;
 		top:8rpx!important;
+	}
+	.left-img .u-image{
+		width:auto!important;
 	}
 </style>
 <style lang="scss">
@@ -321,7 +359,6 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-
 		.text {
 			font-size: 30rpx;
 		}
@@ -354,6 +391,9 @@
 
 	.card-desc {
 		margin-top: 30rpx;
+		margin-bottom:20rpx;
+		color:#666;
+		font-size:28rpx;
 	}
 
 	// .card-desc .iconfont {
@@ -587,8 +627,12 @@
 
 	.left-img {
 		margin-right: 20rpx;
-		flex: 1;
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		
 	}
+	
 
 	.title-img {
 		width: 240rpx;
@@ -752,5 +796,23 @@
 	}
 	.baozhang{
 		font-size:26rpx;
+	}
+	.haoping{
+		color:#ff0000;
+	}
+	.goodsWrap{
+		height:100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		align-content:center; 
+		margin-left:20rpx;
+	}
+	.guige{
+		margin-bottom:50rpx;
+	}
+	.bukexuan{
+		font-size:23rpx;
+		color:#cccccc;
 	}
 </style>

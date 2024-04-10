@@ -3,6 +3,7 @@ const http = uni.$u.http
 // post请求列表
 export const getCardList = (params, config = {}) => http.post('/miniprogram/getCardList', params, config) // 获取卡劵列表
 export const getSoftList = (params, config = {}) => http.post('/miniprogram/getSoftGoodsList', params, config) // 获取软件列表
+export const getShopGoodsList = (params, config = {}) => http.post('/miniprogram/getShopGoodsList', params, config) // 获取日用百货列表
 export const unifiedorderOfWx = (params, config = {}) => http.post('/order/unifiedorderOfWx', params, config) // 微信支付预支付
 export const getOpenId = (params, config = {}) => http.post('/order/getOpenid', params, config) // 获取openid
 export const getBrandEcardList = (params, config = {}) => http.post('/miniprogram/getBrandEcardList', params,

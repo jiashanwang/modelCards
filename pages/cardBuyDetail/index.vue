@@ -7,13 +7,32 @@
 					<image class="img" mode="heightFix" :src="orderData.normalImg"></image>
 				</view>
 				<view class="product-desc">
-					<view class="name">{{orderData.productFullName}} <text
-							class="versionColor">【{{orderData.currSeletedItem.version}}】</text></view>
+					<view class="name">{{orderData.productFullName}} 
+				<!-- 	<text
+							class="versionColor">【{{orderData.currSeletedItem.version}}】</text> -->
+							</view>
+							<view class="face-value guige">
+								规则：默认</view>
 					<view class="face-value redColor">
-						金额：{{orderData.currSeletedItem.amount=='定制版'?'协商定价':orderData.currSeletedItem.amount}} </view>
+						<view>
+							<span class="fuhao">¥</span>{{orderData.amount}}
+						</view>
+						<view class="nodesc">x {{orderData.buyNum}}</view>
+					</view>
 				</view>
 			</view>
-			<view class="notice-desc">不支持退换货</view>
+			<!-- <view class="notice-desc">不支持退换货</view> -->
+		</view>
+		<view class="goods contain">
+			<order-goods :team="{need: orderInfo.team_need}" :list="goodsLists"></order-goods>
+			<view class="item row-between">
+				<view>配送方式</view>
+				<view>快递</view>
+			</view>
+			<view class="item row-between">
+				<view>买家留言</view>
+				<u-input v-model="userRemark" class="flex1 ml20" :clearable="false" placeholder="请添加备注（150字以内）"></u-input>
+			</view>
 		</view>
 		<view class="line-operate"></view>
 		<view class="use-desc">支付成功后，可前往 "个人中心 - 私人定制 - 查看使用"</view>
@@ -188,16 +207,18 @@
 			},
 			// 对订单详情页的数据进行处理
 			handleOrderData(orderData) {
-				if (orderData.currSeletedItem.amount == '定制版') {
-					this.isCustom = true;
-				} else {
-					let totalPrice = orderData.buyNum * orderData.currSeletedItem.amount;
-					this.totalPrice = totalPrice;
-				}
+				debugger;
+				// if (orderData.currSeletedItem.amount == '定制版') {
+				// 	this.isCustom = true;
+				// } else {
+				// 	let totalPrice = orderData.buyNum * orderData.currSeletedItem.amount;
+				// 	this.totalPrice = totalPrice;
+				// }
 				let chargePrice = 0;
 				this.orderData = orderData;
 				this.buyNum = orderData.buyNum;
-				this.specsId = orderData.currSeletedItem.specs_id;
+				
+				// this.specsId = orderData.currSeletedItem.specs_id;
 			},
 			async getOrderData(outtradeno) {
 				let paramsData = {
@@ -609,7 +630,12 @@
 	}
 
 	.redColor {
-		color: #eb8013;
+		width:100%;
+		color: #ff0000;
+		font-size:30rpx;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
 	}
 
 	.versionColor {
@@ -656,5 +682,28 @@
 		line-height: 48rpx;
 		color: #eb8013;
 		font-size: 24rpx;
+	}
+	.guige{
+		margin:10rpx 0;
+		font-size:23rpx;
+	}
+	.fuhao{
+		font-size:20rpx;
+		display: inline-block;
+		margin-right:6rpx;
+	}
+	.nodesc{
+		color:#cccccc;
+		font-size: 24rpx;	
+	}
+	.goods .shop-icon {
+		width: 40rpx;
+		height: 40rpx;
+	}
+	.contain {
+		border-radius: 14rpx;
+		margin: 20rpx 20rpx 0;
+		background-color: #fff;
+		overflow: hidden;
 	}
 </style>
