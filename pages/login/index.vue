@@ -146,7 +146,6 @@
 				}).catch((err) => {})
 			},
 			registerBtn(type) {
-				debugger;
 				if (type == 2) {
 					// 注册					
 					if (!this.username) {

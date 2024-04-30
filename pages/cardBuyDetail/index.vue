@@ -291,7 +291,6 @@
 					},
 					success: (res) => {
 						uni.hideLoading();
-						debugger;
 						let result = res.data;
 						if (result.code == 0) {
 							// 支付平台为官方

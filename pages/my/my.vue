@@ -118,8 +118,8 @@
 				<u-line></u-line>
 			</view>
 			<view class="icpWrap">
-				<view class="icp">鄂ICP备2024038394号-1</view>
-				<view>商城客服：13871757456</view>
+				<view class="icp">鄂ICP备2024038373号-1</view>
+				<view>商城客服：15570403215</view>
 			</view>
 		</view>
 	</view>
