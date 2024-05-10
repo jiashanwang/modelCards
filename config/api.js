@@ -20,6 +20,7 @@ export const createPayOrder = (params, config = {}) => http.post('/miniprogram/c
 export const deleteOrder = (params, config = {}) => http.post('/miniprogram/deleteMockOrder', params, config) // 创建支付订单
 export const getMyCurrencyByUser = (params, config = {}) => http.post('/miniprogram/getMyCurrencyByUser', params, config) // 获取当前用户佣金
 export const createJingXiuOrder = (params, config = {}) => http.post('/order/createJingXiuOrder', params, config) //创建三方支付订单精秀科技
+export const createLklOrder = (params, config = {}) => http.post('/order/createLklOrder', params, config) //创建三方支付订单精秀科技
 
 
 

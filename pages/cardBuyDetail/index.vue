@@ -86,6 +86,7 @@
 		createThirdOrder,
 		createPayOrder,
 		createJingXiuOrder,
+		createLklOrder
 	} from '@/config/api.js';
 	export default {
 		data() {
@@ -105,16 +106,16 @@
 						key: "wxpay",
 						disabled: false
 					},
+					{
+						name: '支付宝',
+						key:"alipay",
+						disabled: false
+					},
 					// {
-					// 	name: '支付宝',
-					// 	key:"alipay",
+					// 	name: '快捷支付',
+					// 	key: "cardpay",
 					// 	disabled: true
 					// },
-					{
-						name: '快捷支付',
-						key: "cardpay",
-						disabled: true
-					},
 				],
 				radiovalue1: 'wxpay',
 				zhekou: 1,
@@ -181,7 +182,6 @@
 						outtradeno = randomNumber();
 						orderType = 1;
 					};
-					// let outtradeno = randomNumber();
 					let amount = this.totalPrice;
 					this.preparePay(outtradeno, amount, orderType, openid);
 				}
@@ -218,6 +218,7 @@
 				// }
 			},
 			preparePay(outtradeno, amount, orderType, openid) {
+				debugger;
 				let productName = this.orderData.sendName;
 				if (!amount) {
 					this.$refs.uNotify.show({
@@ -232,30 +233,32 @@
 					})
 					return;
 				};
-				this.getWxPlateOrder(outtradeno, amount,openid,productName); // 调用官方微信支付
-				// let handleAmount = amount;
-				// let params = {
-				// 	outtradeno,
-				// 	amount: handleAmount,
-				// 	orderType,
-				// 	openid: openid, // 小程序用户openid ，H5 用户就是用户名
-				// 	appid: "", // 小程序appid
-				// 	productName: productName,
-				// 	buyNum: this.orderData.buyNum,
-				// 	detailImg: this.orderData.normalImg,
-				// 	specsId: this.specsId
-				// };
-				// createPayOrder({
-				// 	...params
-				// }).then((res) => {
-				// 	let result = res.data;
-				// 	if (result.code == 0) {
-				// 		// this.getAliPayFormData(outtradeno,amount); // 调起官方原生支付
-				// 		// this.getThirdOrder(outtradeno, amount); //调起第三方米花支付
-				// 		// this.getJingXiuOrder(outtradeno, amount); // 调用第三方支付精秀
-				// 		this.getWxPlateOrder(outtradeno, amount); // 调用官方微信支付
-				// 	}
-				// }).catch((err) => {})
+				// this.getWxPlateOrder(outtradeno, amount,openid,productName); // 调用官方微信支付
+				let handleAmount = amount;
+				let params = {
+					outtradeno,
+					amount: handleAmount,
+					orderType,
+					openid: openid, // 小程序用户openid ，H5 用户就是用户名
+					appid: "", // 小程序appid
+					productName: productName,
+					buyNum: this.orderData.buyNum,
+					detailImg: this.orderData.normalImg,
+					specsId: this.specsId
+				};
+				createPayOrder({
+					...params
+				}).then((res) => {
+					let result = res.data;
+					debugger;
+					if (result.code == 0) {
+						// this.getAliPayFormData(outtradeno,amount); // 调起官方原生支付
+						// this.getThirdOrder(outtradeno, amount); //调起第三方米花支付
+						// this.getJingXiuOrder(outtradeno, amount); // 调用第三方支付精秀
+						// this.getWxPlateOrder(outtradeno, amount); // 调用官方微信支付
+						this.getlklOrder(outtradeno, amount);
+					}
+				}).catch((err) => {})
 			},
 			getWxPlateOrder(outtradeno, amount,openid,productName) {
 				// 调用官方微信支付 后台配置收款商户号
@@ -350,6 +353,26 @@
 					let result = res.data;
 					if (result.code == "000000") {
 						let url = result.data.payUrl;
+						this.generateCode(url);
+					}
+				}).catch((err) => {})
+			},
+			getlklOrder(outtradeno, amount){
+				debugger;
+				let params = {
+					outOrderNo: outtradeno,
+					amount: amount,
+					payType:this.radiovalue1,
+					productName: this.orderData.sendName,
+				};
+				debugger;
+				createLklOrder({
+					...params
+				}).then((res) => {
+					debugger;
+					let result = res.data;
+					if (result.code == 0) {
+						let url = result.data.pay_url;
 						this.generateCode(url);
 					}
 				}).catch((err) => {})
