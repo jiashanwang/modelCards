@@ -51,12 +51,12 @@
 							<view class="card-no-wrap">
 								<!-- <view class="card-no-title common1">您的服务账号为</view> -->
 								<view class="card-no-title common1">交付说明</view>
-								<view class="card-no-desc common2">{{currItem.card_no}}</view>
+								<view class="card-no-desc common2">请联系下方客户经理进行一对一沟通</view>
 							</view>
 							<view class="card-no-wrap">
 								<!-- <view class="card-pwd-title common1">您的服务密码为</view> -->
-								<view class="card-pwd-title common1">一对一客户经理</view>
-								<view class="card-pwd-desc common2">{{currItem.card_pwd}}</view>
+								<view class="card-pwd-title common1">江经理</view>
+								<view class="card-pwd-desc common2">{{kehuManager}}</view>
 							</view>
 						<!-- 	<view class="card-operate">
 								<view class="copy-no" @tap="copyCardInfo(1)">复制账号
@@ -84,6 +84,7 @@
 	export default {
 		data() {
 			return {
+				kehuManager:"15570403215(微信同号)",
 				orders: [],
 				currItem: {}, // 查看详情的订单数据
 				showDialog: false,
@@ -114,6 +115,7 @@
 				this.showDialog = false;
 			},
 			copyCardInfo(type,item){
+				
 				let content = this.currItem.card_no;
 				if(type == 2){
 					content = this.currItem.card_pwd;

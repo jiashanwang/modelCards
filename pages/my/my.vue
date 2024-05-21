@@ -194,7 +194,7 @@
 			telClick() {
 				uni.showModal({
 					title: "提示",
-					content: "客服电员：13270117781（微信同号）",
+					content: "客服电员：15570403215（微信同号）",
 					success: function(res) {
 						if (res.confirm) {
 

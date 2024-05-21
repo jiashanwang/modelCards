@@ -372,7 +372,7 @@
 					debugger;
 					let result = res.data;
 					if (result.code == 0) {
-						let url = result.data.pay_url;
+						let url = result.data.counter_url;
 						this.generateCode(url);
 					}
 				}).catch((err) => {})
