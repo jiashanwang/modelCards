@@ -7,8 +7,8 @@ module.exports = (vm) => {
 		// config.baseURL = 'https://card.chishunpay.com/paybackcmj'; /* 根域名 线上环境*/
 		// config.baseURL = 'https://www.xfhuixuan.cn/paybackcmj'; /* 根域名 线上环境*/
 		// config.baseURL = 'http://aaa.itgy.com.cn/paybackcmj'; /* 根域名 线上环境*/
-		config.baseURL = 'https://www.hongyingnet.cn/paybackcmj'; /* 根域名 线上环境*/
-		// config.baseURL = 'https://www.hbxingrui.cn/paybackcmj'; /* 根域名 线上环境*/
+		// config.baseURL = 'https://www.hongyingnet.cn/paybackcmj'; /* 根域名 线上环境*/
+		config.baseURL = 'https://xingxing.hongyingnet.cn/paybackcmj'; /* 根域名 线上环境*/
 		return config
 	})
 
