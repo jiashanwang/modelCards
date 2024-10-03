@@ -73,8 +73,11 @@
     "h5" : {
         "title" : "顺卡乐选",
         "router" : {
-            "mode" : "hash",
-            "base" : "/rufengcard/"
+            "mode" : "history",
+            "base" : ""
+        },
+        "devServer" : {
+            "https" : false
         }
     }
 }
